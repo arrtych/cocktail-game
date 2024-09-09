@@ -24,6 +24,7 @@ public class RestClient {
 
     private String drinkTypeList = "list.php?c=list";
     private String apiSearch = "search.php?s=";
+    private String apiSearchByFilter = "search.php?f=";
 
     HttpClient client = HttpClient.newHttpClient();
 
@@ -43,7 +44,7 @@ public class RestClient {
             List<DrinkType> drinkTypes = new ArrayList<>();
             jsonObject = new JsonParser().parse(response.body()).getAsJsonObject();
             obj = new Gson().fromJson(response.body(), DTO.class);
-            if (obj.drinks != null) {
+            if (obj.getList() != null) {
                 JsonArray arr = jsonObject.getAsJsonArray("drinks");
                 for (int i = 0; i < arr.size(); i++) {
                     DrinkType dt = new DrinkType(arr.get(i)
@@ -103,12 +104,12 @@ public class RestClient {
         var response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         jsonObject = new JsonParser().parse(response.body()).getAsJsonObject();
         DTO<Cocktail> obj = new Gson().fromJson(response.body(), DTO.class);
-        if (obj.drinks != null) {
+        if (obj.getList() != null) {
             JsonArray arr = jsonObject.getAsJsonArray("drinks");
             List<Cocktail> cocktailList = new ArrayList<>();
             for (int i = 0; i < arr.size(); i++) {
                 Cocktail cocktail = new Cocktail();
-                cocktail.setStrDrink(arr.get(i).getAsJsonObject().get(ApiKeyStr.DRINK.getValue()).getAsString());
+                cocktail.setStrDrink(arr.get(i).getAsJsonObject().get(ApiKeyStr.DRINK.getValue()).getAsString()); // help function
                 cocktail.setStrCategory(arr.get(i).getAsJsonObject().get(ApiKeyStr.CATEGORY.getValue()).getAsString());
 //                cocktail.setStrGlass(arr.get(i).getAsJsonObject().get("strGlass").getAsString());
                 cocktail.setIdDrink(arr.get(i).getAsJsonObject().get(ApiKeyStr.ID.getValue()).getAsString());
@@ -120,7 +121,7 @@ public class RestClient {
                 List<String> ingredientList = new ArrayList<>();
                 for (int j = 1; j <= ingredientsMaxCount; j++) {
                     if (!arr.get(i).getAsJsonObject().get(ApiKeyStr.INGREDIENT.getValue() + j).isJsonNull()) {
-                        String strIngredient = arr.get(i).getAsJsonObject().get("strIngredient" + j).getAsString();
+                        String strIngredient = arr.get(i).getAsJsonObject().get(ApiKeyStr.INGREDIENT.getValue() + j).getAsString();
                         ingredientList.add(strIngredient);
                     }
                 }
@@ -132,6 +133,55 @@ public class RestClient {
             throw new CocktailsGetException("Get request failed. No objects.");
         }
         return cocktailDTO;
+    }
+
+
+    /**
+     * List of all cocktails by first letter.
+     *
+     * @param letter
+     * @return
+     */
+    public DTO<Cocktail> getAllCocktailsByFirstLetter(String letter) {
+        HttpClient client = HttpClient.newHttpClient();
+        String url = this.apiUrl + this.apiSearchByFilter + letter; //
+        DTO<Cocktail> cocktailDTO = new DTO<Cocktail>();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(String.format(url)))
+                .GET()
+                .build();
+        try {
+            cocktailDTO = createCocktailsList(httpRequest, client);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cocktailDTO;
+    }
+
+
+    /**
+     * Get all possible cocktails from API
+     *
+     * @return
+     */
+    public List<Cocktail> getAllCocktailsFromDB() {
+        String possibleChars = "12345679abcdefghijklmnopqrstvwyz";
+        List<Cocktail> cocktailList = new ArrayList<>();
+        try {
+            for (int i = 0; i < possibleChars.length(); i++) {
+                String letter = Character.toString(possibleChars.charAt(i));
+                List<Cocktail> cocktails = getAllCocktailsByFirstLetter(letter).getList();
+                if (cocktails != null) {
+                    for (Cocktail c : cocktails) {
+                        cocktailList.add(c);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cocktailList;
     }
 
 

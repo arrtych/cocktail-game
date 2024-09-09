@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DTO<T> {
     public String status;
-    public List<T> drinks; //rename
+    private List<T> drinks;
 
     public List<T> getList() {
         return drinks;
