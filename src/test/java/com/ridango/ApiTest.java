@@ -26,7 +26,7 @@ public class ApiTest {
     @BeforeEach
     public void init() {
         api = new RestClient();
-        Game game = new Game(player);
+//        Game game = new Game(player);
     }
 
     @Test
@@ -45,6 +45,10 @@ public class ApiTest {
 
         String strIngredient = ApiKeyStr.INGREDIENT.getValue();
         assertEquals("strIngredient", strIngredient);
+
+        String strInstructions = ApiKeyStr.INSTRUCTIONS.getValue();
+        assertEquals("strInstructions", strInstructions);
+
 
     }
 

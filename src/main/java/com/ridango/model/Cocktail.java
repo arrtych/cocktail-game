@@ -8,7 +8,13 @@ public class Cocktail {
     private String strCategory;
     private boolean isAlcoholic;
 //    private String strGlass;
+
+    private String strInstructions;
+
+
+
     private List<String> ingredientsList;
+
 
     public String getIdDrink() {
         return idDrink;
@@ -48,5 +54,13 @@ public class Cocktail {
 
     public void setIngredientsList(List<String> ingredientsList) {
         this.ingredientsList = ingredientsList;
+    }
+
+    public String getStrInstructions() {
+        return strInstructions;
+    }
+
+    public void setStrInstructions(String strInstructions) {
+        this.strInstructions = strInstructions;
     }
 }

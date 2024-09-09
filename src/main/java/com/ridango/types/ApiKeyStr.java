@@ -7,7 +7,9 @@ public enum ApiKeyStr {
     DRINK("strDrink"),
     ALCOHOLIC("strAlcoholic"),
 
-    INGREDIENT("strIngredient");
+    INGREDIENT("strIngredient"),
+
+    INSTRUCTIONS("strInstructions");
 
 
     private String value;

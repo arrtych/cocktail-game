@@ -109,10 +109,16 @@ public class RestClient {
             List<Cocktail> cocktailList = new ArrayList<>();
             for (int i = 0; i < arr.size(); i++) {
                 Cocktail cocktail = new Cocktail();
-                cocktail.setStrDrink(arr.get(i).getAsJsonObject().get(ApiKeyStr.DRINK.getValue()).getAsString()); // help function
-                cocktail.setStrCategory(arr.get(i).getAsJsonObject().get(ApiKeyStr.CATEGORY.getValue()).getAsString());
-//                cocktail.setStrGlass(arr.get(i).getAsJsonObject().get("strGlass").getAsString());
-                cocktail.setIdDrink(arr.get(i).getAsJsonObject().get(ApiKeyStr.ID.getValue()).getAsString());
+
+                cocktail.setIdDrink(
+                        arr.get(i).getAsJsonObject().get(ApiKeyStr.ID.getValue()).getAsString());
+                cocktail.setStrDrink(
+                        arr.get(i).getAsJsonObject().get(ApiKeyStr.DRINK.getValue()).getAsString()); // help function
+                cocktail.setStrCategory(
+                        arr.get(i).getAsJsonObject().get(ApiKeyStr.CATEGORY.getValue()).getAsString());
+                cocktail.setStrInstructions(
+                        arr.get(i).getAsJsonObject().get(ApiKeyStr.INSTRUCTIONS.getValue()).getAsString());
+
                 if (arr.get(i).getAsJsonObject().get(ApiKeyStr.ALCOHOLIC.getValue()).getAsString().equals("Alcoholic")) {
                     cocktail.setAlcoholic(true);
                 } else {
