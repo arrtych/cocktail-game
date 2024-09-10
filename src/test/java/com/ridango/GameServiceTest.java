@@ -25,4 +25,11 @@ public class GameServiceTest {
     public void startGameTest() {
         this.gameService.startGame();
     }
+
+
+    @Test
+    public void printWordTest() {
+        this.gameService.startGame();
+        this.gameService.printWord();
+    }
 }

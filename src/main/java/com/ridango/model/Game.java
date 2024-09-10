@@ -2,6 +2,8 @@ package com.ridango.model;
 
 import com.ridango.util.GameIdGenerator;
 
+import java.util.List;
+
 public class Game {
     private int id;
     private Player player;
@@ -10,8 +12,9 @@ public class Game {
 
     private int step = 0;
 
-
     private Cocktail cocktail;
+
+    private List<char []> wordToGuess;
 
     public Game(Player player) {
         this.player = player;
@@ -56,5 +59,13 @@ public class Game {
 
     public void setCocktail(Cocktail cocktail) {
         this.cocktail = cocktail;
+    }
+
+    public List<char[]> getWordToGuess() {
+        return wordToGuess;
+    }
+
+    public void setWordToGuess(List<char[]> wordToGuess) {
+        this.wordToGuess = wordToGuess;
     }
 }
