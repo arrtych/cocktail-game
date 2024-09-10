@@ -60,13 +60,13 @@ public class ApiTest {
     }
 
     @Test
-    public void ApiGetAllCocktailsByName() {
+    public void ApiGetAllCocktailsByNameTest() {
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
         assertEquals(6, cocktails.size());
     }
 
     @Test
-    public void ApiGetCocktailsByFirstLetter() {
+    public void ApiGetCocktailsByFirstLetterTest() {
         List<Cocktail> cocktails = api.getAllCocktailsByFirstLetter("a").getList();
         assertEquals(25, api.getAllCocktailsByFirstLetter("a").getList().size());
 //        Cocktail cocktail = cocktails.stream().
@@ -82,7 +82,7 @@ public class ApiTest {
 
 
     @Test
-    public void getAllCocktailsFromDB() {
+    public void getAllCocktailsFromDBTest() {
         List<Cocktail> list = api.getAllCocktailsFromDB();
         assertEquals(totalCocktailsAmount, list.size());
 

@@ -1,5 +1,7 @@
 package com.ridango.model;
 
+import com.ridango.util.PlayerIdGenerator;
+
 public class Player {
     private int id;
     private String name;
@@ -7,6 +9,12 @@ public class Player {
 
 
     public Player(String name) {
+        this.id = PlayerIdGenerator.getInstance().generateId();
+        this.name = name;
+
+    }
+    public Player(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 

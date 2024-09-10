@@ -8,7 +8,7 @@ public class Cocktail {
     private String strCategory;
     private boolean isAlcoholic;
 //    private String strGlass;
-
+//    private String strDrinkThumb;
     private String strInstructions;
 
 
