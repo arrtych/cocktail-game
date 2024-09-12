@@ -6,6 +6,10 @@ import com.ridango.game.model.Player;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+//import java.util.stream.Collectors;
+//import java.util.stream.IntStream;
 
 @Service
 public class GameService {
@@ -14,6 +18,10 @@ public class GameService {
     private RestClient api = new RestClient();
 
     private Map<Integer, Game> games = new HashMap<>();
+
+    public Map<Integer, Game> getGames() {
+        return games;
+    }
 
     public GameService() {
         //setPlayer
@@ -31,12 +39,22 @@ public class GameService {
         return cocktail;
     }
 
-    public  List<char[]> divideWord(String word) {
-        List<char[]> charactersList = Arrays.asList(word.toCharArray());
-
-
-        return charactersList;
+    public  List<String> wordToArray(String word) {
+        return Arrays.stream(word.split(""))
+                .collect(Collectors.toList());
     }
+
+    public List<String> wordToArrayForGuess(List<String> originalList) {
+        List<String> result = new ArrayList<>();
+        for (String word : originalList) {
+            char[] underscores = new char[word.length()];
+            Arrays.fill(underscores, '_');
+            result.add(new String(underscores));
+        }
+        return result;
+    }
+
+
 
     public Game  startGame() {
         Game game = new Game();
@@ -45,26 +63,19 @@ public class GameService {
         games.put(game.getId(), game);
 
         Cocktail cocktail = this.generateCocktail();
-        game.setWordToGuess(divideWord(cocktail.getStrDrink()));
+        game.setWordToGuess(wordToArray(cocktail.getStrDrink()));
 
 
 /**
  *
- *         setWordToGuess
- *
+ *         setWordToGuess  // optimize api requests.(change api )
  *         printWord (with empty chars)
- *
  *         player start guess
- *
  *         check if chars exists, and for dublicates, //nb: cant select char twice
  *                 calculates points
- *
  *                 (use hints)
- *
  *         check for win/lose
- *
  *                 (if word guessed setWordToGuess: clear and set next)
- *
  *         check for win/lose
  *
  */
@@ -79,23 +90,29 @@ public class GameService {
         games.put(game.getId(), game);
 
         Cocktail cocktail = this.generateCocktail();
-        game.setWordToGuess(divideWord(cocktail.getStrDrink()));
+        game.setCocktail(cocktail);
+        game.setWordToGuess(wordToArray(cocktail.getStrDrink()));
+        game.setPlayerGuess(wordToArrayForGuess(game.getWordToGuess()));
+
         return game;
     }
+
+
+
     public Game getLastGame() {
         if (games.isEmpty()) {
             return null;
         }
         Optional<Integer> maxKey = games.keySet().stream().max(Integer::compareTo);
-        return maxKey.map(games::get).orElse(null); // Return the game associated with the highest key
+        return maxKey.map(games::get).orElse(null);
     }
 
     public void printWord() {
-        for (char[] chars : this.getLastGame().getWordToGuess()) {
-            for (char c : chars) {
-                System.out.print("_ ");
-            }
-        }
+//        for (char[] chars : this.getLastGame().getWordToGuess()) {
+//            for (char c : chars) {
+//                System.out.print("_");
+//            }
+//        }
 //        System.out.println("t");
 
     }

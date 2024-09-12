@@ -14,7 +14,13 @@ public class Game {
 
     private Cocktail cocktail;
 
-    private List<char []> wordToGuess;
+    private List<String> wordToGuess;
+
+    private List<String> playerGuess;
+
+
+
+    private boolean isActive;
 
     public Game(Player player) {
         this.player = player;
@@ -47,10 +53,12 @@ public class Game {
         return player;
     }
 
+
     public void setPlayer(Player player) {
         //todo: check if player already exists
         //add exception if no player
         this.player = player;
+        this.isActive = true;
     }
 
     public Cocktail getCocktail() {
@@ -61,11 +69,27 @@ public class Game {
         this.cocktail = cocktail;
     }
 
-    public List<char[]> getWordToGuess() {
+    public List<String> getWordToGuess() {
         return wordToGuess;
     }
 
-    public void setWordToGuess(List<char[]> wordToGuess) {
+    public void setWordToGuess(List<String> wordToGuess) {
         this.wordToGuess = wordToGuess;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void endGame() {
+        isActive = false;
+    }
+
+    public List<String> getPlayerGuess() {
+        return playerGuess;
+    }
+
+    public void setPlayerGuess(List<String> playerGuess) {
+        this.playerGuess = playerGuess;
     }
 }
