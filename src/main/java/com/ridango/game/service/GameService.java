@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class GameService {
 
-//    private Game game =new Game();
+
     private RestClient api = new RestClient();
 
     private Map<Integer, Game> games = new HashMap<>();
@@ -119,10 +119,9 @@ public class GameService {
             throw new IllegalArgumentException("No game found for player");
         }
         if (playerId == currentGame.getPlayer().getId()) {
-           if(getLastGame().getWordToGuess().contains(letter)) { // // if letter exist in word
+           if(getLastGame().getWordToGuess().contains(letter)) { // if letter exist in word
                if(!currentGame.getSelectedLetters().contains(letter)) { // if player not selected this letter yet
                    for (int i = 0; i < currentGame.getWordToGuess().size(); i++) {
-//                       System.out.println("Index: " + i + ", Value: " + currentGame.getWordToGuess().get(i));
                        if (currentGame.getWordToGuess().get(i).equals(letter)) { //if current letter equals search letter
                            currentGame.getPlayerGuess().set(i, letter);
                        }
@@ -135,26 +134,19 @@ public class GameService {
                        System.out.println(getLastGame());
                        this.startNewRound(currentGame); // Start a new round with a new cocktail
                    }
-
                    result = true;
                } else {
                    throw new LetterAlreadySelectedException("Player has already chosen this letter.");
                }
 
-
-
            } else {
-
+               //Answer wrong -> show hint
                currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
-//               throw new FalseAttemptException("");
                if (currentGame.getAttemptsLeft() == 0) {
                    throw new GameOverException("Game over! You have no more attempts.");
                }
-//               result = false;
-//               throw new FalseAttemptException("Wrong letter: "+letter+"! Try again");
            }
         }
-//        System.out.println(currentGame);
         return result;
     }
 
@@ -165,6 +157,32 @@ public class GameService {
         currentGame.setWordToGuess(wordToList(newCocktail.getStrDrink()));
         currentGame.setPlayerGuess(wordToArrayForGuess(currentGame.getWordToGuess()));
         currentGame.setAttemptsLeft(MAX_ATTEMPTS); // Reset attempts for the new cocktail
+    }
+
+    public void skipRound(Game currentGame) {//todo: test
+        currentGame.setScore(currentGame.getScore() - 1);
+        //show hint
+    }
+
+    public void showHint(Game currentGame) {
+//        String possibleChars = "12345679abcdefghijklmnopqrstvwyz";
+        List<String> popularLetters = Arrays.asList("e", "a", "r", "i", "o", "t", "n", "s", "l", "c");
+        //todo: add random
+        for (String letter : popularLetters) {
+            //If popularLetter not yet selected and word contains this letter
+            if (!currentGame.getSelectedLetters().contains(letter) && currentGame.getWordToGuess().contains(letter)) {
+                for (int i = 0; i < currentGame.getWordToGuess().size(); i++) {
+                    String currentLetter = currentGame.getWordToGuess().get(i);
+                    if (currentLetter.equalsIgnoreCase(letter)) {
+                        // Reveal the letter in the player's guess
+                        currentGame.getPlayerGuess().set(i, letter);
+                    }
+                }
+                currentGame.getSelectedLetters().add(letter);
+                // Break after revealing the first unselected letter
+                break;
+            }
+        }
     }
 
     public Game getGameById(int gameId) {

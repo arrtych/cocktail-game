@@ -110,10 +110,32 @@ public class GameServiceTest {
     }
 
 
+    @Test
+    public void showHintTest() {
+        gameService.startNewGame(player);
+
+        List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
+        Cocktail cocktail = cocktails.get(0);
+        gameService.getLastGame().setCocktail(cocktail);
+        gameService.showHint(gameService.getLastGame());
+
+        assertEquals("a",gameService.getLastGame().getPlayerGuess().get(1));
+        assertEquals("a",gameService.getLastGame().getPlayerGuess().get(4));
+        assertEquals("a",gameService.getLastGame().getPlayerGuess().get(8));
+
+        gameService.showHint(gameService.getLastGame());
+        assertEquals("r",gameService.getLastGame().getPlayerGuess().get(2));
+        assertEquals("r",gameService.getLastGame().getPlayerGuess().get(5));
+        System.out.println(gameService);
+
+    }
+
 
 //    @Test
 //    public void printWordTest() {
 //        this.gameService.startGame();
 //        this.gameService.printWord();
 //    }
+
+
 }
