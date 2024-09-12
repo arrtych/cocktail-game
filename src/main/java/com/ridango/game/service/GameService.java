@@ -1,5 +1,8 @@
 package com.ridango.game.service;
 
+import com.ridango.game.exceptions.FalseAttemptException;
+import com.ridango.game.exceptions.GameOverException;
+import com.ridango.game.exceptions.LetterAlreadySelectedException;
 import com.ridango.game.model.Cocktail;
 import com.ridango.game.model.Game;
 import com.ridango.game.model.Player;
@@ -7,9 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-//import java.util.stream.Collectors;
-//import java.util.stream.IntStream;
 
 @Service
 public class GameService {
@@ -18,6 +18,8 @@ public class GameService {
     private RestClient api = new RestClient();
 
     private Map<Integer, Game> games = new HashMap<>();
+
+    private static final int MAX_ATTEMPTS = 5;
 
     public Map<Integer, Game> getGames() {
         return games;
@@ -39,8 +41,9 @@ public class GameService {
         return cocktail;
     }
 
-    public  List<String> wordToArray(String word) {
+    public  List<String> wordToList(String word) {
         return Arrays.stream(word.split(""))
+                .map(String::toLowerCase)
                 .collect(Collectors.toList());
     }
 
@@ -63,15 +66,15 @@ public class GameService {
         games.put(game.getId(), game);
 
         Cocktail cocktail = this.generateCocktail();
-        game.setWordToGuess(wordToArray(cocktail.getStrDrink()));
+        game.setWordToGuess(wordToList(cocktail.getStrDrink()));
 
 
 /**
  *
  *         setWordToGuess  // optimize api requests.(change api )
- *         printWord (with empty chars)
- *         player start guess
- *         check if chars exists, and for dublicates, //nb: cant select char twice
+ *         printWord (with empty chars) +
+ *         player start guess +
+ *         check if chars exists, and for dublicates, //nb: cant select char twice +
  *                 calculates points
  *                 (use hints)
  *         check for win/lose
@@ -91,11 +94,13 @@ public class GameService {
 
         Cocktail cocktail = this.generateCocktail();
         game.setCocktail(cocktail);
-        game.setWordToGuess(wordToArray(cocktail.getStrDrink()));
+        game.setAttemptsLeft(MAX_ATTEMPTS);
+        game.setWordToGuess(wordToList(cocktail.getStrDrink()));
         game.setPlayerGuess(wordToArrayForGuess(game.getWordToGuess()));
-
         return game;
     }
+
+
 
 
 
@@ -107,37 +112,59 @@ public class GameService {
         return maxKey.map(games::get).orElse(null);
     }
 
-    public void printWord() {
-//        for (char[] chars : this.getLastGame().getWordToGuess()) {
-//            for (char c : chars) {
-//                System.out.print("_");
-//            }
-//        }
-//        System.out.println("t");
-
-    }
-
-    public boolean checkPlayerGuess(String search, int playerId) {
+    public boolean checkPlayerGuess(String letter, int playerId) {
         boolean result = false;
         Game currentGame = this.getLastGame();
+        if (currentGame == null || playerId != currentGame.getPlayer().getId()) {
+            throw new IllegalArgumentException("No game found for player");
+        }
         if (playerId == currentGame.getPlayer().getId()) {
-           if(getLastGame().getWordToGuess().contains(search)) { // // if letter exist in word
-               if(!currentGame.getSelectedLetters().contains(search)) { // if player not selected this letter yet
+           if(getLastGame().getWordToGuess().contains(letter)) { // // if letter exist in word
+               if(!currentGame.getSelectedLetters().contains(letter)) { // if player not selected this letter yet
                    for (int i = 0; i < currentGame.getWordToGuess().size(); i++) {
 //                       System.out.println("Index: " + i + ", Value: " + currentGame.getWordToGuess().get(i));
-                       if (currentGame.getWordToGuess().get(i).equals(search)) { //if current letter equals search letter
-                           currentGame.getPlayerGuess().set(i, search);
+                       if (currentGame.getWordToGuess().get(i).equals(letter)) { //if current letter equals search letter
+                           currentGame.getPlayerGuess().set(i, letter);
                        }
                    }
-                   currentGame.getSelectedLetters().add(search); //save player search letter
+                   currentGame.getSelectedLetters().add(letter); //save player search letter
+
+                   // Check if the word is completely guessed
+                   if (!currentGame.getPlayerGuess().contains("_")) {
+                       currentGame.setScore(currentGame.getScore() + currentGame.getAttemptsLeft()); // Increase score
+                       System.out.println(getLastGame());
+                       this.startNewRound(currentGame); // Start a new round with a new cocktail
+                   }
+
                    result = true;
+               } else {
+                   throw new LetterAlreadySelectedException("Player has already chosen this letter.");
                }
 
 
+
+           } else {
+
+               currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
+//               throw new FalseAttemptException("");
+               if (currentGame.getAttemptsLeft() == 0) {
+                   throw new GameOverException("Game over! You have no more attempts.");
+               }
+//               result = false;
+//               throw new FalseAttemptException("Wrong letter: "+letter+"! Try again");
            }
         }
 //        System.out.println(currentGame);
         return result;
+    }
+
+    public void startNewRound(Game currentGame) {
+        // Reset the game with a new cocktail
+        Cocktail newCocktail = this.generateCocktail();
+        currentGame.setCocktail(newCocktail);
+        currentGame.setWordToGuess(wordToList(newCocktail.getStrDrink()));
+        currentGame.setPlayerGuess(wordToArrayForGuess(currentGame.getWordToGuess()));
+        currentGame.setAttemptsLeft(MAX_ATTEMPTS); // Reset attempts for the new cocktail
     }
 
     public Game getGameById(int gameId) {

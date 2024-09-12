@@ -11,6 +11,8 @@ public class Game {
 
     private int score = 0;
 
+    private int attemptsLeft = 5; // Max attempts per game
+
     private int step = 0;
 
     private Cocktail cocktail;
@@ -98,6 +100,14 @@ public class Game {
 
     public List<String> getSelectedLetters() {
         return selectedLetters;
+    }
+
+    public int getAttemptsLeft() {
+        return attemptsLeft;
+    }
+
+    public void setAttemptsLeft(int attemptsLeft) {
+        this.attemptsLeft = attemptsLeft;
     }
 
 }

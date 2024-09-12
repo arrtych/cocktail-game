@@ -1,5 +1,7 @@
 package com.ridango;
 
+import com.ridango.game.exceptions.FalseAttemptException;
+import com.ridango.game.exceptions.LetterAlreadySelectedException;
 import com.ridango.game.model.Cocktail;
 import com.ridango.game.model.Game;
 import com.ridango.game.model.Player;
@@ -67,7 +69,44 @@ public class GameServiceTest {
         this.gameService.getLastGame().setCocktail(cocktail);
 
         assertTrue(this.gameService.checkPlayerGuess("a", player.getId()));
+
+        LetterAlreadySelectedException exception = assertThrows(
+            LetterAlreadySelectedException.class,
+            () -> {
+                this.gameService.checkPlayerGuess("a", player.getId());
+            }
+        );
+        assertEquals("Player has already chosen this letter.", exception.getMessage());
+
         assertFalse(this.gameService.checkPlayerGuess("x", player.getId()));
+
+//        FalseAttemptException exception1 = assertThrows(
+//                FalseAttemptException.class,
+//                () -> {
+//                    this.gameService.checkPlayerGuess("x", player.getId());
+//                }
+//        );
+//        assertEquals("Wrong letter: "+"x"+"! Try again", exception1.getMessage());
+    }
+
+    @Test
+    public void checkPlayerGuessFullWordCorrectWithOneMistakeTest() {
+        gameService.startNewGame(player);
+
+        List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
+        Cocktail cocktail = cocktails.get(0);
+        gameService.getLastGame().setCocktail(cocktail);
+
+        assertTrue(gameService.checkPlayerGuess("a", player.getId()));
+        assertFalse(gameService.checkPlayerGuess("h", player.getId()));
+        assertTrue(gameService.checkPlayerGuess("m", player.getId()));
+        assertTrue(gameService.checkPlayerGuess("r", player.getId()));
+        assertTrue(gameService.checkPlayerGuess("g", player.getId()));
+        assertTrue(gameService.checkPlayerGuess("i", player.getId()));
+        assertTrue(gameService.checkPlayerGuess("t", player.getId()));
+
+        assertEquals(gameService.getLastGame().getScore(), 4);
+//        System.out.println(this.gameService.getLastGame());
     }
 
 
