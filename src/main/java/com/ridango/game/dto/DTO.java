@@ -1,4 +1,4 @@
-package com.ridango.dto;
+package com.ridango.game.dto;
 
 import java.util.List;
 

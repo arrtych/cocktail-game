@@ -1,12 +1,12 @@
-package com.ridango.service;
+package com.ridango.game.service;
 
 
 import com.google.gson.JsonArray;
-import com.ridango.dto.DTO;
-import com.ridango.exceptions.CocktailsGetException;
-import com.ridango.model.Cocktail;
-import com.ridango.types.ApiKeyStr;
-import com.ridango.types.DrinkType;
+import com.ridango.game.dto.DTO;
+import com.ridango.game.exceptions.CocktailsGetException;
+import com.ridango.game.model.Cocktail;
+import com.ridango.game.types.ApiKeyStr;
+import com.ridango.game.types.DrinkType;
 
 import java.io.IOException;
 import java.net.URI;

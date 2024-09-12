@@ -1,4 +1,4 @@
-package com.ridango.model;
+package com.ridango.game.model;
 
 import java.util.List;
 

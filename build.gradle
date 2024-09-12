@@ -15,14 +15,16 @@ repositories {
 
 dependencies {
 	runtimeOnly 'com.h2database:h2'
-	
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	
+
 	implementation 'org.springframework.boot:spring-boot-starter-web',
 			'org.springframework.boot:spring-boot-starter-data-jpa',
-			'org.projectlombok:lombok',
-			'com.google.code.gson:gson:2.10'
+			'org.projectlombok:lombok'
+	implementation 'com.google.code.gson:gson:2.10'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0' // Swagger/OpenAPI dependencies,
+	implementation 'org.springdoc:springdoc-openapi-data-rest:1.7.0' // to support JPA/Model annotations
 
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

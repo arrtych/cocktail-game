@@ -1,8 +1,8 @@
 package com.ridango;
 
-import com.ridango.model.Game;
-import com.ridango.service.GameService;
-import com.ridango.service.RestClient;
+import com.ridango.game.model.Game;
+import com.ridango.game.service.GameService;
+import com.ridango.game.service.RestClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

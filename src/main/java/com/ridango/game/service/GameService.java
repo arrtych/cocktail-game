@@ -1,8 +1,8 @@
-package com.ridango.service;
+package com.ridango.game.service;
 
-import com.ridango.model.Cocktail;
-import com.ridango.model.Game;
-import com.ridango.model.Player;
+import com.ridango.game.model.Cocktail;
+import com.ridango.game.model.Game;
+import com.ridango.game.model.Player;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -73,6 +73,15 @@ public class GameService {
         return game;
     }
 
+    public Game startNewGame(Player player) {
+        Game game = new Game();
+        game.setPlayer(player);
+        games.put(game.getId(), game);
+
+        Cocktail cocktail = this.generateCocktail();
+        game.setWordToGuess(divideWord(cocktail.getStrDrink()));
+        return game;
+    }
     public Game getLastGame() {
         if (games.isEmpty()) {
             return null;

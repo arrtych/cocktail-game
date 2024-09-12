@@ -1,10 +1,9 @@
 package com.ridango;
 
-import com.ridango.model.Cocktail;
-import com.ridango.model.Game;
-import com.ridango.model.Player;
-import com.ridango.service.RestClient;
-import com.ridango.types.ApiKeyStr;
+import com.ridango.game.model.Cocktail;
+import com.ridango.game.model.Player;
+import com.ridango.game.service.RestClient;
+import com.ridango.game.types.ApiKeyStr;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,6 @@
-package com.ridango.model;
+package com.ridango.game.model;
 
-import com.ridango.util.GameIdGenerator;
+import com.ridango.game.util.GameIdGenerator;
 
 import java.util.List;
 

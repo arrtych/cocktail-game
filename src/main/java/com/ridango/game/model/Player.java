@@ -1,6 +1,6 @@
-package com.ridango.model;
+package com.ridango.game.model;
 
-import com.ridango.util.PlayerIdGenerator;
+import com.ridango.game.util.PlayerIdGenerator;
 
 public class Player {
     private int id;

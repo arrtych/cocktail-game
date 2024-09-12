@@ -1,4 +1,4 @@
-package com.ridango.util;
+package com.ridango.game.util;
 
 public class PlayerIdGenerator {
 

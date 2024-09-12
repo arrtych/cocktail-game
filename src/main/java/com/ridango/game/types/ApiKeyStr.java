@@ -1,4 +1,4 @@
-package com.ridango.types;
+package com.ridango.game.types;
 
 public enum ApiKeyStr {
     ID("idDrink"),
