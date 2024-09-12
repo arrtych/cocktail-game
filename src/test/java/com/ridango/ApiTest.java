@@ -84,7 +84,5 @@ public class ApiTest {
     public void getAllCocktailsFromDBTest() {
         List<Cocktail> list = api.getAllCocktailsFromDB();
         assertEquals(totalCocktailsAmount, list.size());
-
-
     }
 }

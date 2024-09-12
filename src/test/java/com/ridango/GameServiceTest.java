@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.util.AssertionErrors.assertNotNull;
 
 public class GameServiceTest {
@@ -26,7 +25,7 @@ public class GameServiceTest {
 
     @BeforeEach
     public void init() {
-//        api = new RestClient();
+        api = new RestClient();
 //        game = new Game();
         gameService = new GameService();
         player = new Player("Tom");
@@ -58,6 +57,19 @@ public class GameServiceTest {
         String letter = lastGame.getPlayerGuess().get(1);
         assertEquals(letter, "_");
     }
+
+    @Test
+    public void checkPlayerGuessTest() {
+        this.gameService.startNewGame(player);
+
+        List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
+        Cocktail cocktail = cocktails.get(0);
+        this.gameService.getLastGame().setCocktail(cocktail);
+
+        assertTrue(this.gameService.checkPlayerGuess("a", player.getId()));
+        assertFalse(this.gameService.checkPlayerGuess("x", player.getId()));
+    }
+
 
 
 //    @Test

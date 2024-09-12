@@ -117,9 +117,26 @@ public class GameService {
 
     }
 
-    public boolean checkPlayerGuess(Character character) {
+    public boolean checkPlayerGuess(String search, int playerId) {
         boolean result = false;
-//        if()
+        Game currentGame = this.getLastGame();
+        if (playerId == currentGame.getPlayer().getId()) {
+           if(getLastGame().getWordToGuess().contains(search)) { // // if letter exist in word
+               if(!currentGame.getSelectedLetters().contains(search)) { // if player not selected this letter yet
+                   for (int i = 0; i < currentGame.getWordToGuess().size(); i++) {
+//                       System.out.println("Index: " + i + ", Value: " + currentGame.getWordToGuess().get(i));
+                       if (currentGame.getWordToGuess().get(i).equals(search)) { //if current letter equals search letter
+                           currentGame.getPlayerGuess().set(i, search);
+                       }
+                   }
+                   currentGame.getSelectedLetters().add(search); //save player search letter
+                   result = true;
+               }
+
+
+           }
+        }
+//        System.out.println(currentGame);
         return result;
     }
 

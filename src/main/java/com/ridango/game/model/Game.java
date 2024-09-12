@@ -2,6 +2,7 @@ package com.ridango.game.model;
 
 import com.ridango.game.util.GameIdGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
@@ -14,10 +15,12 @@ public class Game {
 
     private Cocktail cocktail;
 
+
     private List<String> wordToGuess;
 
     private List<String> playerGuess;
 
+    private List<String> selectedLetters = new ArrayList<>();
 
 
     private boolean isActive;
@@ -92,4 +95,9 @@ public class Game {
     public void setPlayerGuess(List<String> playerGuess) {
         this.playerGuess = playerGuess;
     }
+
+    public List<String> getSelectedLetters() {
+        return selectedLetters;
+    }
+
 }
