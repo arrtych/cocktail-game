@@ -22,6 +22,7 @@ public class GameController {
     }
 
     // Start a new game for a player
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/start")
     public Game startGame(@RequestBody Player player) {
         return gameService.startNewGame(player);
