@@ -13,7 +13,7 @@ public class Game {
 
     private int attemptsLeft = 5; // Max attempts per game
 
-    private int step = 0;
+//    private int step = 0;
 
     private Cocktail cocktail;
 
@@ -46,13 +46,13 @@ public class Game {
         this.score = score;
     }
 
-    public int getStep() {
-        return step;
-    }
+//    public int getStep() {
+//        return step;
+//    }
 
-    public void nextStep() {
-        this.step++;
-    }
+//    public void nextStep() {
+//        this.step++;
+//    }
 
     public Player getPlayer() {
         return player;
@@ -100,6 +100,10 @@ public class Game {
 
     public List<String> getSelectedLetters() {
         return selectedLetters;
+    }
+
+    public void setSelectedLetters(List<String> selectedLetters) {
+        this.selectedLetters = selectedLetters;
     }
 
     public int getAttemptsLeft() {

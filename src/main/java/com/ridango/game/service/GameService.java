@@ -1,6 +1,5 @@
 package com.ridango.game.service;
 
-import com.ridango.game.exceptions.FalseAttemptException;
 import com.ridango.game.exceptions.GameOverException;
 import com.ridango.game.exceptions.LetterAlreadySelectedException;
 import com.ridango.game.model.Cocktail;
@@ -35,6 +34,7 @@ public class GameService {
     public Cocktail generateCocktail() {
         //todo: change later logic for getting
         // todo: get cocktail with name.length > 3
+        //todo: In one game same cocktail shouldn't appear twice
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
         Cocktail cocktail = cocktails.get(0);
 
@@ -143,6 +143,8 @@ public class GameService {
                //Answer wrong -> show hint
                currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
                if (currentGame.getAttemptsLeft() == 0) {
+                   currentGame.getPlayer().setScrore(currentGame.getScore());
+                   currentGame.endGame();
                    throw new GameOverException("Game over! You have no more attempts.");
                }
            }
@@ -156,15 +158,17 @@ public class GameService {
         currentGame.setCocktail(newCocktail);
         currentGame.setWordToGuess(wordToList(newCocktail.getStrDrink()));
         currentGame.setPlayerGuess(wordToArrayForGuess(currentGame.getWordToGuess()));
+        currentGame.setSelectedLetters(new ArrayList<>());
         currentGame.setAttemptsLeft(MAX_ATTEMPTS); // Reset attempts for the new cocktail
     }
 
-    public void skipRound(Game currentGame) {//todo: test
-        currentGame.setScore(currentGame.getScore() - 1);
+    public void skipRound() {//todo: test
+        this.getLastGame().setAttemptsLeft(this.getLastGame().getAttemptsLeft() - 1);
+        this.startNewRound(this.getLastGame());
         //show hint
     }
 
-    public void showHint(Game currentGame) {
+    public void revealNextLetter(Game currentGame) {
 //        String possibleChars = "12345679abcdefghijklmnopqrstvwyz";
         List<String> popularLetters = Arrays.asList("e", "a", "r", "i", "o", "t", "n", "s", "l", "c");
         //todo: add random

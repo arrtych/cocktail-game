@@ -1,6 +1,5 @@
 package com.ridango;
 
-import com.ridango.game.exceptions.FalseAttemptException;
 import com.ridango.game.exceptions.LetterAlreadySelectedException;
 import com.ridango.game.model.Cocktail;
 import com.ridango.game.model.Game;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.util.AssertionErrors.assertNotNull;
 
 public class GameServiceTest {
 
@@ -117,13 +115,13 @@ public class GameServiceTest {
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
         Cocktail cocktail = cocktails.get(0);
         gameService.getLastGame().setCocktail(cocktail);
-        gameService.showHint(gameService.getLastGame());
+        gameService.revealNextLetter(gameService.getLastGame());
 
         assertEquals("a",gameService.getLastGame().getPlayerGuess().get(1));
         assertEquals("a",gameService.getLastGame().getPlayerGuess().get(4));
         assertEquals("a",gameService.getLastGame().getPlayerGuess().get(8));
 
-        gameService.showHint(gameService.getLastGame());
+        gameService.revealNextLetter(gameService.getLastGame());
         assertEquals("r",gameService.getLastGame().getPlayerGuess().get(2));
         assertEquals("r",gameService.getLastGame().getPlayerGuess().get(5));
         System.out.println(gameService);
@@ -131,11 +129,6 @@ public class GameServiceTest {
     }
 
 
-//    @Test
-//    public void printWordTest() {
-//        this.gameService.startGame();
-//        this.gameService.printWord();
-//    }
 
 
 }
