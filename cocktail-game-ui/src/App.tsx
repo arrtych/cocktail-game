@@ -7,8 +7,7 @@ function App() {
   return (
     <GameContextProvider>
       <div className="App">
-        React
-        <Container></Container>
+        <Container />
       </div>
     </GameContextProvider>
   );

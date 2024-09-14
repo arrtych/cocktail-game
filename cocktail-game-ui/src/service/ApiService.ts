@@ -19,7 +19,7 @@ export const startGame = async (player: PlayerProps) => {
 
     const response = await axios.post(`${API_BASE_URL}/start`, requestBody);
 
-    console.log("Game started:", response.data);
+    // console.log("Game started:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error starting the game:", error);
