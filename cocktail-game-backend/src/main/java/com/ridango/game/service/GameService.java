@@ -87,8 +87,9 @@ public class GameService {
         return game;
     }
 
-    public Game startNewGame(Player player) {
+    public Game startNewGame(String playerName) {
         Game game = new Game();
+        Player player = new Player(playerName);
         game.setPlayer(player);
         games.put(game.getId(), game);
 
@@ -143,7 +144,7 @@ public class GameService {
                //Answer wrong -> show hint
                currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
                if (currentGame.getAttemptsLeft() == 0) {
-                   currentGame.getPlayer().setScrore(currentGame.getScore());
+                   currentGame.getPlayer().setScore(currentGame.getScore());
                    currentGame.endGame();
                    throw new GameOverException("Game over! You have no more attempts.");
                }

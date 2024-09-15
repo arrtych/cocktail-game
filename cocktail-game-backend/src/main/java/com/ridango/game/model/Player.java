@@ -6,7 +6,7 @@ public class Player {
     private int id;
     private String name;
 
-    private int scrore = 0;
+    private int score = 0;
 
 
     public Player(String name) {
@@ -35,11 +35,11 @@ public class Player {
         this.name = name;
     }
 
-    public int getScrore() {
-        return scrore;
+    public int getScore() {
+        return score;
     }
 
-    public void setScrore(int scrore) {
-        this.scrore = scrore;
+    public void setScore(int score) {
+        this.score = score;
     }
 }

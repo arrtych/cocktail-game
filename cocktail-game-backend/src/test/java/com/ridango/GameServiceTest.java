@@ -21,14 +21,15 @@ public class GameServiceTest {
 
     private GameService gameService;
 
-    private Player player;
+    private String player;
 
     @BeforeEach
     public void init() {
         api = new RestClient();
 //        game = new Game();
         gameService = new GameService();
-        player = new Player("Tom");
+//        player = new Player("Tom");
+        player = "Tom";
 
     }
 
@@ -66,17 +67,17 @@ public class GameServiceTest {
         Cocktail cocktail = cocktails.get(0);
         this.gameService.getLastGame().setCocktail(cocktail);
 
-        assertTrue(this.gameService.checkPlayerGuess("a", player.getId()));
+        assertTrue(this.gameService.checkPlayerGuess("a", gameService.getLastGame().getPlayer().getId()));
 
         LetterAlreadySelectedException exception = assertThrows(
             LetterAlreadySelectedException.class,
             () -> {
-                this.gameService.checkPlayerGuess("a", player.getId());
+                this.gameService.checkPlayerGuess("a", gameService.getLastGame().getPlayer().getId());
             }
         );
         assertEquals("Player has already chosen this letter.", exception.getMessage());
 
-        assertFalse(this.gameService.checkPlayerGuess("x", player.getId()));
+        assertFalse(this.gameService.checkPlayerGuess("x", gameService.getLastGame().getPlayer().getId()));
 
 //        FalseAttemptException exception1 = assertThrows(
 //                FalseAttemptException.class,
@@ -94,14 +95,14 @@ public class GameServiceTest {
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
         Cocktail cocktail = cocktails.get(0);
         gameService.getLastGame().setCocktail(cocktail);
-
-        assertTrue(gameService.checkPlayerGuess("a", player.getId()));
-        assertFalse(gameService.checkPlayerGuess("h", player.getId()));
-        assertTrue(gameService.checkPlayerGuess("m", player.getId()));
-        assertTrue(gameService.checkPlayerGuess("r", player.getId()));
-        assertTrue(gameService.checkPlayerGuess("g", player.getId()));
-        assertTrue(gameService.checkPlayerGuess("i", player.getId()));
-        assertTrue(gameService.checkPlayerGuess("t", player.getId()));
+        int playerId = gameService.getLastGame().getPlayer().getId();
+        assertTrue(gameService.checkPlayerGuess("a", playerId));
+        assertFalse(gameService.checkPlayerGuess("h",playerId));
+        assertTrue(gameService.checkPlayerGuess("m", playerId));
+        assertTrue(gameService.checkPlayerGuess("r", playerId));
+        assertTrue(gameService.checkPlayerGuess("g", playerId));
+        assertTrue(gameService.checkPlayerGuess("i", playerId));
+        assertTrue(gameService.checkPlayerGuess("t", playerId));
 
         assertEquals(gameService.getLastGame().getScore(), 4);
 //        System.out.println(this.gameService.getLastGame());

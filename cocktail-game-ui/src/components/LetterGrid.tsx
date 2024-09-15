@@ -8,6 +8,7 @@ const LetterGrid: React.FC = () => {
     display: "flex",
     justifyContent: "center",
     flexWrap: "wrap",
+    marginTop: "2.5em",
   };
 
   const letterStyle = {

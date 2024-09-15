@@ -1,5 +1,6 @@
 package com.ridango.game.controller;
 
+import com.ridango.game.dto.PlayerNameRequest;
 import com.ridango.game.exceptions.GameOverException;
 import com.ridango.game.model.Game;
 import com.ridango.game.model.Player;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/game")
@@ -24,8 +27,8 @@ public class GameController {
     // Start a new game for a player
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/start")
-    public Game startGame(@RequestBody Player player) {
-        return gameService.startNewGame(player);
+    public Game startGame(@RequestBody PlayerNameRequest request) {
+        return gameService.startNewGame(request.getPlayerName());
     }
 
     @PutMapping("/{playerId}/guess")
@@ -56,8 +59,16 @@ public class GameController {
 
     }
 
+    @GetMapping("/games")
+    public ResponseEntity<Map<Integer, Game>> getAllGames() {
+        return ResponseEntity.ok(gameService.getGames());
+    }
+
     @GetMapping("/")
     public String home() {
         return "Welcome to the Spring Boot Application!2";
     }
+
+
+
 }

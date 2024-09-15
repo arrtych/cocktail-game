@@ -12,6 +12,7 @@ const boxStyle = {
   fontSize: "2em",
   fontWeight: "700",
   gap: "1em",
+  marginTop: "2.5em",
 };
 
 const letterStyle = {};

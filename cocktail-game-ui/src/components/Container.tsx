@@ -6,6 +6,7 @@ import CustomButton from "./CustomButton";
 import AddPlayer from "./AddPlayer";
 import GuessContainer from "./GuessContainer";
 import GuessWord from "./GuessWord";
+import PlayerScore from "./PlayerScore";
 
 const Container: React.FC = () => {
   const { game, handleStartGame } = useGameContext();
@@ -26,6 +27,7 @@ const Container: React.FC = () => {
 
         <AddPlayer />
 
+        <PlayerScore />
         <GuessContainer />
       </Grid>
     </Box>
