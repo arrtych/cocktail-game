@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 import Grid from "@mui/material/Grid2";
+import { useGameContext } from "../context/GameContext";
 
 interface PlayerScoreProps {
   name?: string;
@@ -20,19 +21,22 @@ const boxStyle = {
   display: "flex",
   gap: "10px",
 };
+
 const PlayerScore: React.FC<PlayerScoreProps> = (props: PlayerScoreProps) => {
+  const { player } = useGameContext();
   return (
-    // style={{display: "none"}}
-    <Grid size={12} className="name" sx={playerScoreStyle}>
-      <Box className="name" sx={boxStyle}>
-        <p>Player:</p>
-        <p>Tim</p>
-      </Box>
-      <Box className="score" sx={boxStyle}>
-        <p>Score:</p>
-        <p>0</p>
-      </Box>
-    </Grid>
+    player && (
+      <Grid size={12} className="name" sx={playerScoreStyle}>
+        <Box className="name" sx={boxStyle}>
+          <p>Player:</p>
+          <p>{player?.name}</p>
+        </Box>
+        <Box className="score" sx={boxStyle}>
+          <p>Score:</p>
+          <p>{player?.score}</p>
+        </Box>
+      </Grid>
+    )
   );
 };
 

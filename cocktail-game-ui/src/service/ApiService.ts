@@ -4,16 +4,15 @@ const API_BASE_URL = "http://localhost:8080/api/game";
 const start = "start";
 
 interface PlayerProps {
-  id?: number;
-  name: string;
-  score?: number;
+  // id?: number;
+  playerName: string;
+  // score?: number;
 }
 
 export const startGame = async (player: PlayerProps) => {
   try {
     const requestBody = {
-      // id: player.id,
-      name: player.name,
+      playerName: player.playerName,
     };
 
     const response = await axios.post(`${API_BASE_URL}/start`, requestBody);

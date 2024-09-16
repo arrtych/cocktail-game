@@ -3,6 +3,7 @@ import LetterGrid from "./LetterGrid";
 import Grid from "@mui/material/Grid2";
 import GuessWord from "./GuessWord";
 import { Box } from "@mui/material";
+import { useGameContext } from "../context/GameContext";
 
 const wordDescriptionStyle = {
   fontSize: "1em",
@@ -13,20 +14,24 @@ const wordDescriptionStyle = {
 };
 
 const GuessContainer: React.FC = () => {
+  const { game } = useGameContext();
   return (
     <Box className="guess-container">
-      <Grid size={12} className="word-description" sx={wordDescriptionStyle}>
-        <p>
-          Rub the rim of the glass with the lime slice to make the salt stick to
-          it. Take care to moisten only the outer rim and sprinkle the salt on
-          it. The salt should present to the lips of the imbiber and never mix
-          into the cocktail. Shake the other ingredients with ice, then
-          carefully pour into the glass.
-        </p>
-      </Grid>
-      <Grid size={12} className="guess-Word">
-        <GuessWord />
-      </Grid>
+      {game && (
+        <>
+          <Grid
+            size={12}
+            className="word-description"
+            sx={wordDescriptionStyle}
+          >
+            <p>{game.cocktail.strInstructions}</p>
+          </Grid>
+          <Grid size={12} className="guess-Word">
+            <GuessWord />
+          </Grid>
+        </>
+      )}
+
       <Grid size={12} className="letter-grid">
         <LetterGrid />
       </Grid>

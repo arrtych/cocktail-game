@@ -9,7 +9,7 @@ import GuessWord from "./GuessWord";
 import PlayerScore from "./PlayerScore";
 
 const Container: React.FC = () => {
-  const { game, handleStartGame } = useGameContext();
+  const { game } = useGameContext();
   useEffect(() => {
     // handleStartGame();
   }, []);
@@ -25,7 +25,8 @@ const Container: React.FC = () => {
           </Typography>
         </Grid>
 
-        <AddPlayer />
+        {/* Show Add player if game not created yet */}
+        {!game && <AddPlayer />}
 
         <PlayerScore />
         <GuessContainer />

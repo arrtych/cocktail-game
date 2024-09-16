@@ -1,7 +1,9 @@
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import React from "react";
+import React, { useState } from "react";
 import CustomButton from "./CustomButton";
+import { useGameContext } from "../context/GameContext";
+import { startGame } from "../service/ApiService";
 
 const addPLayerStyles = {
   display: "flex",
@@ -11,10 +13,30 @@ const addPLayerStyles = {
 };
 
 const AddPlayer: React.FC = () => {
+  const [playerName, setPlayerName] = useState<string>("");
+  const { setGame, setPlayer } = useGameContext();
+
+  const handleAddPlayer = async () => {
+    if (playerName.trim() === "") return;
+
+    try {
+      const game = await startGame({ playerName: playerName });
+      setGame(game);
+      setPlayer(game.player);
+    } catch (error) {
+      console.error("Failed to start the game:", error);
+    }
+  };
+
   return (
     <Grid size={12} className="add-player" style={addPLayerStyles}>
-      <TextField id="outlined-basic" label="Player name" variant="standard" />
-      <CustomButton>Add player</CustomButton>
+      <TextField
+        id="outlined-basic"
+        label="Player name"
+        variant="standard"
+        onChange={(e) => setPlayerName(e.target.value)}
+      />
+      <CustomButton onClick={handleAddPlayer}>Add player</CustomButton>
     </Grid>
   );
 };

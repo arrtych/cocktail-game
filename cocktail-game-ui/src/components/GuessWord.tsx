@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
+import { useGameContext } from "../context/GameContext";
 
 export interface GuessWordProps {
   word?: string; //todo
@@ -17,15 +18,22 @@ const boxStyle = {
 
 const letterStyle = {};
 const GuessWord: React.FC<GuessWordProps> = (props: GuessWordProps) => {
+  const { game } = useGameContext();
   return (
     <Box sx={boxStyle}>
-      {Array(wordLength)
+      {game?.playerGuess.map((letter: string, index: number) => (
+        <Box key={index} sx={letterStyle}>
+          {letter}
+        </Box>
+      ))}
+
+      {/* {Array(wordLength)
         .fill(null)
         .map((_, index) => (
           <Box key={index} sx={letterStyle} className="boox">
             _
           </Box>
-        ))}
+        ))} */}
     </Box>
   );
 };

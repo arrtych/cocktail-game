@@ -1,31 +1,44 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { startGame } from "../service/ApiService";
 
+interface Player {
+  id: number;
+  name: string;
+  score: number;
+}
+interface Game {
+  id: number;
+}
 type GameContext = {
   game: any;
-  handleStartGame: () => void;
+  player: Player | null;
+  setPlayer: (player: Player) => void;
+  setGame: (game: Game) => void;
+  handleStartGame: (name: string) => void;
 };
 
 export const GameContext = createContext({} as GameContext);
 
-const handleStartGame = async () => {
-  const player = { id: 1, name: "Alice2" }; // No score provided
+const handleStartGame = async (name: string) => {
+  const player = { playerName: name };
   const game = await startGame(player);
+
   console.log("Game started:", game);
 };
 
 export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  //   const [words, setWords] = useState([]);
-  //   const [] = useState<string[]>([]);
-  //   const [game, setGame] = useState<any[]>([]);
-  const [game, setGame] = useState([]);
+  const [player, setPlayer] = useState<Player | null>(null);
+  const [game, setGame] = useState<Game | null>(null);
   return (
     <GameContext.Provider
       value={{
         game,
         handleStartGame,
+        player,
+        setPlayer,
+        setGame,
       }}
     >
       {children}
