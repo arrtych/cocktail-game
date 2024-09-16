@@ -24,7 +24,7 @@ const GuessContainer: React.FC = () => {
             className="word-description"
             sx={wordDescriptionStyle}
           >
-            <p>{game.cocktail.strInstructions}</p>
+            <p>{game?.cocktail?.strInstructions}</p>
           </Grid>
           <Grid size={12} className="guess-Word">
             <GuessWord />

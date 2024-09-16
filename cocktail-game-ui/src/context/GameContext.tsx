@@ -1,5 +1,9 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-import { startGame } from "../service/ApiService";
+import {
+  GuessLetterProps,
+  startGame,
+  guessLetter,
+} from "../service/ApiService";
 
 interface Player {
   id: number;
@@ -15,6 +19,7 @@ type GameContext = {
   setPlayer: (player: Player) => void;
   setGame: (game: Game) => void;
   handleStartGame: (name: string) => void;
+  handleGuessLetter: (props: GuessLetterProps) => void;
 };
 
 export const GameContext = createContext({} as GameContext);
@@ -26,11 +31,24 @@ const handleStartGame = async (name: string) => {
   console.log("Game started:", game);
 };
 
+// const handleGuessLetter = async (props: GuessLetterProps) => {
+//   guessLetter(props);
+// };
+
+const handleGuessLetter = async (
+  props: GuessLetterProps,
+  setGame: (game: Game) => void
+) => {
+  const updatedGame = await guessLetter(props); // Make the guessLetter API call
+  setGame(updatedGame); // Update the game in the context after guessing a letter
+};
+
 export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [player, setPlayer] = useState<Player | null>(null);
   const [game, setGame] = useState<Game | null>(null);
+
   return (
     <GameContext.Provider
       value={{
@@ -39,6 +57,8 @@ export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
         player,
         setPlayer,
         setGame,
+        handleGuessLetter: (props: GuessLetterProps) =>
+          handleGuessLetter(props, setGame),
       }}
     >
       {children}

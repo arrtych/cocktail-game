@@ -4,9 +4,12 @@ const API_BASE_URL = "http://localhost:8080/api/game";
 const start = "start";
 
 interface PlayerProps {
-  // id?: number;
   playerName: string;
-  // score?: number;
+}
+
+export interface GuessLetterProps {
+  playerId: number;
+  letter: string;
 }
 
 export const startGame = async (player: PlayerProps) => {
@@ -34,3 +37,20 @@ export const startGame = async (player: PlayerProps) => {
 // http://localhost:8080/api/game/skip // put
 
 // http://localhost:8080/api/game/end // post
+
+// @PutMapping("/{playerId}/guess")
+
+export const guessLetter = async (props: GuessLetterProps) => {
+  try {
+    const playerId = props.playerId;
+    const letter = props.letter;
+    const response = await axios.put(
+      `${API_BASE_URL}/${playerId}/guess?letter=${letter}`
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error starting the game:", error);
+    throw error;
+  }
+};

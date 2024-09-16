@@ -172,7 +172,7 @@ public class RestClient {
      * @return
      */
     public List<Cocktail> getAllCocktailsFromDB() {
-        String possibleChars = "12345679abcdefghijklmnopqrstvwyz";
+        String possibleChars = "12345679abcdefghijklmnopqrstvwxyz";
         List<Cocktail> cocktailList = new ArrayList<>();
         try {
             for (int i = 0; i < possibleChars.length(); i++) {

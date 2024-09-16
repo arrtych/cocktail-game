@@ -31,15 +31,17 @@ public class GameController {
         return gameService.startNewGame(request.getPlayerName());
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/{playerId}/guess")
-    public ResponseEntity<String> guessLetter(@PathVariable int playerId, @RequestParam String letter) {
-        try {
-            boolean correctGuess = gameService.checkPlayerGuess(letter, playerId);
+    public ResponseEntity<Game> guessLetter(@PathVariable int playerId, @RequestParam String letter) {
+//        try {
+          gameService.checkPlayerGuess(letter, playerId);
             //todo: think about 500
-            return ResponseEntity.ok(correctGuess ? "Correct guess!" : "Incorrect guess. Try again.");
-        } catch (GameOverException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+//            return ResponseEntity.ok(correctGuess ? "Correct guess!" : "Incorrect guess. Try again.");
+            return ResponseEntity.ok(gameService.getLastGame());
+//        } catch (GameOverException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
     }
 
     // Get the current state of the game

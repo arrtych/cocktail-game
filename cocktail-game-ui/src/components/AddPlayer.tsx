@@ -5,13 +5,6 @@ import CustomButton from "./CustomButton";
 import { useGameContext } from "../context/GameContext";
 import { startGame } from "../service/ApiService";
 
-const addPLayerStyles = {
-  display: "flex",
-  justifyContent: "center",
-  gap: "2em",
-  marginTop: "2em",
-};
-
 const AddPlayer: React.FC = () => {
   const [playerName, setPlayerName] = useState<string>("");
   const { setGame, setPlayer } = useGameContext();
@@ -26,6 +19,13 @@ const AddPlayer: React.FC = () => {
     } catch (error) {
       console.error("Failed to start the game:", error);
     }
+  };
+
+  const addPLayerStyles = {
+    display: "flex",
+    justifyContent: "center",
+    gap: "2em",
+    marginTop: "2em",
   };
 
   return (

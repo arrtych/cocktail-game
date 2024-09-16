@@ -132,6 +132,7 @@ public class GameService {
                    // Check if the word is completely guessed
                    if (!currentGame.getPlayerGuess().contains("_")) {
                        currentGame.setScore(currentGame.getScore() + currentGame.getAttemptsLeft()); // Increase score
+                       currentGame.getPlayer().setScore(currentGame.getScore());
                        System.out.println(getLastGame());
                        this.startNewRound(currentGame); // Start a new round with a new cocktail
                    }

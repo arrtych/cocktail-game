@@ -6,6 +6,7 @@ import { useGameContext } from "../context/GameContext";
 interface PlayerScoreProps {
   name?: string;
   score?: number;
+  attemptsLeft?: number;
 }
 const playerScoreStyle = {
   display: "flex",
@@ -23,7 +24,7 @@ const boxStyle = {
 };
 
 const PlayerScore: React.FC<PlayerScoreProps> = (props: PlayerScoreProps) => {
-  const { player } = useGameContext();
+  const { game, player } = useGameContext();
   return (
     player && (
       <Grid size={12} className="name" sx={playerScoreStyle}>
@@ -34,6 +35,10 @@ const PlayerScore: React.FC<PlayerScoreProps> = (props: PlayerScoreProps) => {
         <Box className="score" sx={boxStyle}>
           <p>Score:</p>
           <p>{player?.score}</p>
+        </Box>
+        <Box className="score" sx={boxStyle}>
+          <p>Attemps left:</p>
+          <p>{game?.attemptsLeft}</p>
         </Box>
       </Grid>
     )
