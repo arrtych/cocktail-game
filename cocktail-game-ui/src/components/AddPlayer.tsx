@@ -7,13 +7,13 @@ import { startGame } from "../service/ApiService";
 
 const AddPlayer: React.FC = () => {
   const [playerName, setPlayerName] = useState<string>("");
-  const { setGame, setPlayer } = useGameContext();
+  const { setGame, setPlayer, handleStartGame } = useGameContext();
 
   const handleAddPlayer = async () => {
     if (playerName.trim() === "") return;
 
     try {
-      const game = await startGame({ playerName: playerName });
+      const game = await startGame({ playerName: playerName }); //todo: fix and test
       setGame(game);
       setPlayer(game.player);
     } catch (error) {

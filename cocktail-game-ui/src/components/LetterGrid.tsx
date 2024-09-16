@@ -13,7 +13,6 @@ const LetterGrid: React.FC = () => {
       const playerId = game?.player?.id;
 
       await handleGuessLetter({ playerId, letter });
-      // setGame()
     } catch (error) {
       console.error("Failed to handleLetterClick:", error);
     }
@@ -37,17 +36,35 @@ const LetterGrid: React.FC = () => {
     fontWeight: "bold",
   };
 
+  const letterDisabledStyle = {
+    color: "black",
+    backgroundColor: "#80808091",
+  };
+
   return (
     <Box sx={letterGridStyle}>
-      {letters.split("").map((letter, index) => (
-        <CustomButton
-          key={index}
-          variant="text"
-          onClick={() => handleLetterClick(letter)}
-        >
-          <Box sx={letterStyle}>{letter.toUpperCase()}</Box>
-        </CustomButton>
-      ))}
+      {letters.split("").map((letter, index) => {
+        const isLetterSelected = game?.selectedLetters.indexOf(letter) > -1;
+        return (
+          <CustomButton
+            key={index}
+            variant="text"
+            onClick={() =>
+              game && !isLetterSelected && handleLetterClick(letter)
+            }
+          >
+            <Box
+              sx={{
+                ...letterStyle,
+                ...((!game && letterDisabledStyle) ||
+                  (game && isLetterSelected && letterDisabledStyle)),
+              }}
+            >
+              {letter.toUpperCase()}
+            </Box>
+          </CustomButton>
+        );
+      })}
     </Box>
   );
 };

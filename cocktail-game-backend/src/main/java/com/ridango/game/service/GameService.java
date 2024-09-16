@@ -144,10 +144,11 @@ public class GameService {
            } else {
                //Answer wrong -> show hint
                currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
+               currentGame.getSelectedLetters().add(letter); //save player search letter
                if (currentGame.getAttemptsLeft() == 0) {
                    currentGame.getPlayer().setScore(currentGame.getScore());
                    currentGame.endGame();
-                   throw new GameOverException("Game over! You have no more attempts.");
+//                   throw new GameOverException("Game over! You have no more attempts.");
                }
            }
         }

@@ -54,6 +54,7 @@ public class GameController {
     //todo: endgame()
 
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/skip")
     public ResponseEntity<Game> skipRound() {
         this.gameService.skipRound();

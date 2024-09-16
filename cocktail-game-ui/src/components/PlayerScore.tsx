@@ -3,27 +3,28 @@ import React from "react";
 import Grid from "@mui/material/Grid2";
 import { useGameContext } from "../context/GameContext";
 
-interface PlayerScoreProps {
-  name?: string;
-  score?: number;
-  attemptsLeft?: number;
-}
-const playerScoreStyle = {
-  display: "flex",
-  //   gap: "5px",
-  fontWeight: "bold",
-  flexDirection: "row",
-  justifyContent: "center",
-  gap: "25px",
-  marginTop: "25px",
-};
+// interface PlayerScoreProps {
+//   //remove
+//   name?: string;
+//   score?: number;
+//   attemptsLeft?: number;
+// }
 
-const boxStyle = {
-  display: "flex",
-  gap: "10px",
-};
+const PlayerScore: React.FC = () => {
+  const playerScoreStyle = {
+    display: "flex",
+    fontWeight: "bold",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: "25px",
+    marginTop: "25px",
+  };
 
-const PlayerScore: React.FC<PlayerScoreProps> = (props: PlayerScoreProps) => {
+  const boxStyle = {
+    display: "flex",
+    gap: "10px",
+  };
+
   const { game, player } = useGameContext();
   return (
     player && (
@@ -34,7 +35,7 @@ const PlayerScore: React.FC<PlayerScoreProps> = (props: PlayerScoreProps) => {
         </Box>
         <Box className="score" sx={boxStyle}>
           <p>Score:</p>
-          <p>{player?.score}</p>
+          <p>{game?.score}</p>
         </Box>
         <Box className="score" sx={boxStyle}>
           <p>Attemps left:</p>

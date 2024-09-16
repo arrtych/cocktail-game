@@ -50,7 +50,17 @@ export const guessLetter = async (props: GuessLetterProps) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error starting the game:", error);
+    console.error("Error guessLetter:", error);
+    throw error;
+  }
+};
+
+export const skipRound = async () => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/skip`);
+    return response.data;
+  } catch (error) {
+    console.error("Error skipRound:", error);
     throw error;
   }
 };

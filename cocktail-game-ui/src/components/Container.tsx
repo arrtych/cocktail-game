@@ -7,12 +7,13 @@ import AddPlayer from "./AddPlayer";
 import GuessContainer from "./GuessContainer";
 import GuessWord from "./GuessWord";
 import PlayerScore from "./PlayerScore";
+import GameOver from "./GameOver";
 
 const Container: React.FC = () => {
   const { game } = useGameContext();
-  useEffect(() => {
-    // handleStartGame();
-  }, []);
+  // useEffect(() => {
+  //   // handleStartGame();
+  // }, []);
 
   const mainSectionStyles = { width: "900px", margin: "0 auto" };
 
@@ -29,7 +30,8 @@ const Container: React.FC = () => {
         {!game && <AddPlayer />}
 
         <PlayerScore />
-        <GuessContainer />
+
+        {game && !game?.active ? <GameOver /> : <GuessContainer />}
       </Grid>
     </Box>
   );
