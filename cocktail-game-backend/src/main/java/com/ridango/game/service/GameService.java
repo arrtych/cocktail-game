@@ -5,10 +5,14 @@ import com.ridango.game.exceptions.LetterAlreadySelectedException;
 import com.ridango.game.model.Cocktail;
 import com.ridango.game.model.Game;
 import com.ridango.game.model.Player;
+import com.ridango.game.types.ApiKeyStr;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.ridango.game.types.ApiKeyStr.*;
+//import static com.ridango.game.types.ApiKeyStr.CATEGORY;
 
 @Service
 public class GameService {
@@ -145,9 +149,9 @@ public class GameService {
                //Answer wrong -> show hint
                currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
                currentGame.getSelectedLetters().add(letter); //save player search letter
+
                if (currentGame.getAttemptsLeft() == 0) {
-                   currentGame.getPlayer().setScore(currentGame.getScore());
-                   currentGame.endGame();
+                   this.endGame();
 //                   throw new GameOverException("Game over! You have no more attempts.");
                }
            }
@@ -162,7 +166,9 @@ public class GameService {
         currentGame.setWordToGuess(wordToList(newCocktail.getStrDrink()));
         currentGame.setPlayerGuess(wordToArrayForGuess(currentGame.getWordToGuess()));
         currentGame.setSelectedLetters(new ArrayList<>());
+        currentGame.setCocktailOpenInfo(null);
         currentGame.setAttemptsLeft(MAX_ATTEMPTS); // Reset attempts for the new cocktail
+
     }
 
     public void skipRound() {//todo: test
@@ -171,10 +177,16 @@ public class GameService {
         //show hint
     }
 
-    public void revealNextLetter(Game currentGame) {
-//        String possibleChars = "12345679abcdefghijklmnopqrstvwyz";
+    public void endGame() {
+        Game currentGame = this.getLastGame();
+        currentGame.getPlayer().setScore(currentGame.getScore());
+        currentGame.endGame();
+    }
+
+    public void revealNextLetter() {
         List<String> popularLetters = Arrays.asList("e", "a", "r", "i", "o", "t", "n", "s", "l", "c");
         //todo: add random
+        Game currentGame = this.getLastGame();
         for (String letter : popularLetters) {
             //If popularLetter not yet selected and word contains this letter
             if (!currentGame.getSelectedLetters().contains(letter) && currentGame.getWordToGuess().contains(letter)) {
@@ -186,10 +198,43 @@ public class GameService {
                     }
                 }
                 currentGame.getSelectedLetters().add(letter);
+                currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
                 // Break after revealing the first unselected letter
                 break;
             }
         }
+    }
+
+
+    /**
+     * Method to shot hint as Cocktail data
+     * @param cocktail
+     * @param property - Cocktail object property for showing as hint
+     * @return
+     */
+    public boolean showCocktailInfo(Cocktail cocktail, ApiKeyStr property) {
+
+        Map<String, Object> cocktailMap = new HashMap<>();
+        Object obj = null;
+        switch (property) {
+            case CATEGORY:
+                obj = cocktail.getStrCategory();
+
+                break;
+            case INGREDIENT:
+                obj = cocktail.getIngredientsList();
+                break;
+            case GLASS:
+                obj = cocktail.getStrGlass();
+            default:
+        }
+        String key = property.getValue();
+        cocktailMap.put(key, obj);
+        if(obj != null) {
+            this.getLastGame().setCocktailOpenInfo(cocktailMap);
+            return true;
+        }
+        return false;
     }
 
     public Game getGameById(int gameId) {

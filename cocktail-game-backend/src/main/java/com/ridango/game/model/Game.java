@@ -3,7 +3,9 @@ package com.ridango.game.model;
 import com.ridango.game.util.GameIdGenerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Game {
     private int id;
@@ -23,6 +25,11 @@ public class Game {
     private List<String> playerGuess;
 
     private List<String> selectedLetters = new ArrayList<>();
+
+    /**
+     * opened cocktail data, when player used hints
+     */
+    private Map<String, Object> cocktailOpenInfo = new HashMap<>();
 
 
     private boolean isActive;
@@ -114,4 +121,11 @@ public class Game {
         this.attemptsLeft = attemptsLeft;
     }
 
+    public Map<String, Object> getCocktailOpenInfo() {
+        return cocktailOpenInfo;
+    }
+
+    public void setCocktailOpenInfo(Map<String, Object> cocktailOpenInfo) {
+        this.cocktailOpenInfo = cocktailOpenInfo;
+    }
 }

@@ -48,6 +48,9 @@ public class ApiTest {
         String strInstructions = ApiKeyStr.INSTRUCTIONS.getValue();
         assertEquals("strInstructions", strInstructions);
 
+        String strGlass = ApiKeyStr.GLASS.getValue();
+        assertEquals("strGlass", strGlass);
+
 
     }
 

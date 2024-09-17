@@ -6,6 +6,7 @@ import com.ridango.game.model.Game;
 import com.ridango.game.model.Player;
 import com.ridango.game.service.GameService;
 import com.ridango.game.service.RestClient;
+import com.ridango.game.types.ApiKeyStr;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameServiceTest {
 
@@ -105,29 +107,60 @@ public class GameServiceTest {
         assertTrue(gameService.checkPlayerGuess("t", playerId));
 
         assertEquals(gameService.getLastGame().getScore(), 4);
+        assertEquals(gameService.getLastGame().getPlayer().getScore(), 4);
 //        System.out.println(this.gameService.getLastGame());
     }
 
 
     @Test
-    public void showHintTest() {
+    public void revealNextLetterTest() {
         gameService.startNewGame(player);
 
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
         Cocktail cocktail = cocktails.get(0);
         gameService.getLastGame().setCocktail(cocktail);
-        gameService.revealNextLetter(gameService.getLastGame());
+        Game lastGame =  gameService.getLastGame();
+        gameService.revealNextLetter();
 
-        assertEquals("a",gameService.getLastGame().getPlayerGuess().get(1));
-        assertEquals("a",gameService.getLastGame().getPlayerGuess().get(4));
-        assertEquals("a",gameService.getLastGame().getPlayerGuess().get(8));
+        assertEquals("a",lastGame.getPlayerGuess().get(1));
+        assertEquals("a",lastGame.getPlayerGuess().get(4));
+        assertEquals("a",lastGame.getPlayerGuess().get(8));
+        assertEquals(4, lastGame.getAttemptsLeft());
 
-        gameService.revealNextLetter(gameService.getLastGame());
-        assertEquals("r",gameService.getLastGame().getPlayerGuess().get(2));
-        assertEquals("r",gameService.getLastGame().getPlayerGuess().get(5));
+        gameService.revealNextLetter();
+        assertEquals("r",lastGame.getPlayerGuess().get(2));
+        assertEquals("r",lastGame.getPlayerGuess().get(5));
+        assertEquals(3, lastGame.getAttemptsLeft());
         System.out.println(gameService);
 
     }
+
+
+    @Test
+    public void showCocktailInfoWhenPlayerNeedHintsTest() {
+        gameService.startNewGame(player);
+
+        List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
+        Cocktail cocktail = cocktails.get(0);
+        gameService.getLastGame().setCocktail(cocktail);
+        assertTrue(gameService.showCocktailInfo(cocktail, ApiKeyStr.CATEGORY));
+        assertEquals("Ordinary Drink", gameService.getLastGame().getCocktailOpenInfo().get("strCategory"));
+
+        assertFalse(gameService.showCocktailInfo(cocktail, ApiKeyStr.ALCOHOLIC));
+
+        assertTrue(gameService.showCocktailInfo(cocktail, ApiKeyStr.INGREDIENT));
+        List<String> ingredients = (List<String>) gameService.getLastGame().getCocktailOpenInfo().get("strIngredient");
+        assertEquals(4, ingredients.size());
+        assertEquals("Tequila", ingredients.get(0));
+
+        assertTrue(gameService.showCocktailInfo(cocktail, ApiKeyStr.GLASS));
+        assertEquals("Cocktail glass", gameService.getLastGame().getCocktailOpenInfo().get("strGlass"));
+
+
+
+    }
+
+//    this.showCocktailInfo(currentGame.getCocktail(), INGREDIENT);
 
 
 

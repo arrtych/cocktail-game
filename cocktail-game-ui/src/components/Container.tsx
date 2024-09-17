@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useGameContext } from "../context/GameContext";
 import { Box, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import CustomButton from "./CustomButton";
 import AddPlayer from "./AddPlayer";
 import GuessContainer from "./GuessContainer";
 import GuessWord from "./GuessWord";
@@ -26,8 +25,8 @@ const Container: React.FC = () => {
           </Typography>
         </Grid>
 
-        {/* Show Add player if game not created yet */}
-        {!game && <AddPlayer />}
+        {/* Show Add player if game not created yet or finished */}
+        {(!game || !game?.active) && <AddPlayer />}
 
         <PlayerScore />
 

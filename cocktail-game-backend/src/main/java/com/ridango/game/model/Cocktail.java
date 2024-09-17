@@ -7,7 +7,7 @@ public class Cocktail {
     private String strDrink;
     private String strCategory;
     private boolean isAlcoholic;
-//    private String strGlass;
+    private String strGlass;
 //    private String strDrinkThumb;
     private String strInstructions;
 
@@ -62,5 +62,13 @@ public class Cocktail {
 
     public void setStrInstructions(String strInstructions) {
         this.strInstructions = strInstructions;
+    }
+
+    public String getStrGlass() {
+        return strGlass;
+    }
+
+    public void setStrGlass(String strGlass) {
+        this.strGlass = strGlass;
     }
 }

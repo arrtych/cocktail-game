@@ -4,6 +4,8 @@ import {
   startGame,
   guessLetter,
   skipRound,
+  finishGame,
+  revealLetter,
 } from "../service/ApiService";
 
 interface Player {
@@ -22,6 +24,8 @@ type GameContext = {
   handleStartGame: (name: string) => void;
   handleGuessLetter: (props: GuessLetterProps) => void;
   handleSkipRound: () => void;
+  handleFinishGame: () => void;
+  handleRevealLetter: () => void;
 };
 
 export const GameContext = createContext({} as GameContext);
@@ -36,6 +40,16 @@ const handleStartGame = async (name: string) => {
 const handleSkipRound = async (setGame: (game: Game) => void) => {
   const updatedGame = await skipRound();
   setGame(updatedGame);
+};
+
+const handleFinishGame = async (setGame: (game: Game) => void) => {
+  const game = await finishGame();
+  setGame(game);
+};
+
+const handleRevealLetter = async (setGame: (game: Game) => void) => {
+  const game = await revealLetter();
+  setGame(game);
 };
 
 const handleGuessLetter = async (
@@ -63,6 +77,8 @@ export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
         handleGuessLetter: (props: GuessLetterProps) =>
           handleGuessLetter(props, setGame),
         handleSkipRound: () => handleSkipRound(setGame),
+        handleFinishGame: () => handleFinishGame(setGame),
+        handleRevealLetter: () => handleRevealLetter(setGame),
       }}
     >
       {children}

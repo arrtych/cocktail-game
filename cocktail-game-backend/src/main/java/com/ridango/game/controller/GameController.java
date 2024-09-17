@@ -14,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/game")
+@CrossOrigin(origins = "http://localhost:3000")
 public class GameController {
 
     @Autowired
@@ -25,13 +26,12 @@ public class GameController {
     }
 
     // Start a new game for a player
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/start")
     public Game startGame(@RequestBody PlayerNameRequest request) {
         return gameService.startNewGame(request.getPlayerName());
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @PutMapping("/{playerId}/guess")
     public ResponseEntity<Game> guessLetter(@PathVariable int playerId, @RequestParam String letter) {
 //        try {
@@ -47,14 +47,10 @@ public class GameController {
     // Get the current state of the game
     @GetMapping("/state")
     public ResponseEntity<Game> getCurrentGameState() {
-
         return ResponseEntity.ok(gameService.getLastGame()); // You might want to handle cases where no game exists for the player
     }
 
-    //todo: endgame()
 
-
-    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/skip")
     public ResponseEntity<Game> skipRound() {
         this.gameService.skipRound();
@@ -62,15 +58,25 @@ public class GameController {
 
     }
 
-    @GetMapping("/games")
+    @PutMapping("reveal-letter")
+    public ResponseEntity<Game> revealNextLetter() {
+        this.gameService.revealNextLetter();
+        return ResponseEntity.ok(gameService.getLastGame());
+    }
+
+
+    @GetMapping("/all-games")
     public ResponseEntity<Map<Integer, Game>> getAllGames() {
         return ResponseEntity.ok(gameService.getGames());
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "Welcome to the Spring Boot Application!2";
+
+    @PutMapping("/finish-game")
+    public ResponseEntity<Game> finishGame() {
+        gameService.endGame();
+        return ResponseEntity.ok(gameService.getLastGame());
     }
+
 
 
 

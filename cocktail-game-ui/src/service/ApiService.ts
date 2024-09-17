@@ -64,3 +64,23 @@ export const skipRound = async () => {
     throw error;
   }
 };
+
+export const finishGame = async () => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/finish-game`);
+    return response.data;
+  } catch (error) {
+    console.error("Error finishGame:", error);
+    throw error;
+  }
+};
+
+export const revealLetter = async () => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/reveal-letter`);
+    return response.data;
+  } catch (error) {
+    console.error("Error revealLetter:", error);
+    throw error;
+  }
+};

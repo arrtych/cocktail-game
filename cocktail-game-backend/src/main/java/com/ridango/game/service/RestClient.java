@@ -113,11 +113,14 @@ public class RestClient {
                 cocktail.setIdDrink(
                         arr.get(i).getAsJsonObject().get(ApiKeyStr.ID.getValue()).getAsString());
                 cocktail.setStrDrink(
-                        arr.get(i).getAsJsonObject().get(ApiKeyStr.DRINK.getValue()).getAsString()); // help function
+                        arr.get(i).getAsJsonObject().get(ApiKeyStr.DRINK.getValue()).getAsString()); // refactor
                 cocktail.setStrCategory(
                         arr.get(i).getAsJsonObject().get(ApiKeyStr.CATEGORY.getValue()).getAsString());
                 cocktail.setStrInstructions(
                         arr.get(i).getAsJsonObject().get(ApiKeyStr.INSTRUCTIONS.getValue()).getAsString());
+                cocktail.setStrGlass(
+                        arr.get(i).getAsJsonObject().get(ApiKeyStr.GLASS.getValue()).getAsString());
+
 
                 if (arr.get(i).getAsJsonObject().get(ApiKeyStr.ALCOHOLIC.getValue()).getAsString().equals("Alcoholic")) {
                     cocktail.setAlcoholic(true);

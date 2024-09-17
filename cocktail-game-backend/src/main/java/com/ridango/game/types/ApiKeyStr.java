@@ -9,6 +9,8 @@ public enum ApiKeyStr {
 
     INGREDIENT("strIngredient"),
 
+    GLASS("strGlass"),
+
     INSTRUCTIONS("strInstructions");
 
 
