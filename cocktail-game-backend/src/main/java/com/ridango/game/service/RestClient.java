@@ -15,6 +15,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -139,7 +141,7 @@ public class RestClient {
             }
             cocktailDTO.setList(cocktailList);
         } else {
-            throw new CocktailsGetException("Get request failed. No objects.");
+            throw new CocktailsGetException("Get request failed. No objects. Request:" + httpRequest.uri());
         }
         return cocktailDTO;
     }
@@ -193,5 +195,32 @@ public class RestClient {
         return cocktailList;
     }
 
+    /**
+     * Get random cocktails from api where length of coktail name >= 3 and <= 15
+     * @param amount of random cocktails
+     * @return
+     */
+    public List<Cocktail> getRandomCocktailsFromDB(int amount) {
+        String possibleChars = "12345679abcdefghijklmnopqrstvwxyz";
+        List<Cocktail> cocktailList = new ArrayList<>();
+        Random random = new Random();
+        try {
+            do {
+                int randomIndex = random.nextInt(possibleChars.length());
+                String randomLetter = String.valueOf(possibleChars.charAt(randomIndex));
+                List<Cocktail> cocktails = getAllCocktailsByFirstLetter(randomLetter).getList();
+                int randomIdx = random.nextInt(cocktails.size());
+                Cocktail cocktail = cocktails.get(randomIdx);
+                if (!cocktailList.contains(cocktail) &&
+                        cocktail.getStrDrink().length() >= 3 && cocktail.getStrDrink().length() <= 15) {
+                    cocktailList.add(cocktail);
+                }
+
+            } while (cocktailList.size() < amount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cocktailList;
+    }
 
 }

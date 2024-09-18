@@ -66,6 +66,11 @@ public class GameController {
         return ResponseEntity.ok(gameService.getLastGame());
     }
 
+    /**
+     * Method to show Cocktail data as hints
+     * @param cocktailParam as string: category or glass or ingredients
+     * @return
+     */
     @PutMapping("show-cocktail-hints/{cocktailParam}")
     public ResponseEntity<Game> showCocktailHintInfo(@PathVariable String cocktailParam) {
         Cocktail cocktail = this.gameService.getLastGame().getCocktail();
@@ -73,7 +78,6 @@ public class GameController {
         this.gameService.showCocktailHintInfo(cocktail, param);
         return ResponseEntity.ok(gameService.getLastGame());
     }
-
 
 
     private ApiKeyStr getCocktailParam(Cocktail cocktail, String param) {

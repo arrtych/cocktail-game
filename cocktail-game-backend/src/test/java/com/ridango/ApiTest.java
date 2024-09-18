@@ -4,11 +4,13 @@ import com.ridango.game.model.Cocktail;
 import com.ridango.game.model.Player;
 import com.ridango.game.service.RestClient;
 import com.ridango.game.types.ApiKeyStr;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ApiTest {
@@ -71,15 +73,15 @@ public class ApiTest {
     public void ApiGetCocktailsByFirstLetterTest() {
         List<Cocktail> cocktails = api.getAllCocktailsByFirstLetter("a").getList();
         assertEquals(25, api.getAllCocktailsByFirstLetter("a").getList().size());
-//        Cocktail cocktail = cocktails.stream().
-//                filter(p -> p.getStrDrink().equals("ABC")).
-//                findAny().orElse(null);
-//
-//        Cocktail cocktail2 = cocktails.stream().
-//                filter(p -> p.getStrDrink().equals("Afterglow")).
-//                findAny().orElse(null);
-//        assertEquals(true, cocktail.isAlcoholic());
-//        assertEquals(false, cocktail2.isAlcoholic());
+        Cocktail cocktail = cocktails.stream().
+                filter(p -> p.getStrDrink().equals("ABC")).
+                findAny().orElse(null);
+
+        Cocktail cocktail2 = cocktails.stream().
+                filter(p -> p.getStrDrink().equals("Afterglow")).
+                findAny().orElse(null);
+        assertEquals(true, cocktail.isAlcoholic());
+        assertEquals(false, cocktail2.isAlcoholic());
     }
 
 
@@ -87,5 +89,19 @@ public class ApiTest {
     public void getAllCocktailsFromDBTest() {
         List<Cocktail> list = api.getAllCocktailsFromDB();
         assertEquals(totalCocktailsAmount, list.size());
+        assertTrue(list.get(1) instanceof Cocktail);
+    }
+
+    @Test
+    public void getRandomCocktailsFromDBTest() {
+        List<Cocktail> list = api.getRandomCocktailsFromDB(10);
+        assertTrue(list.get(9) instanceof Cocktail);
+        assertEquals(10, list.size());
+
+        List<Cocktail> list2 = api.getRandomCocktailsFromDB(5);
+        assertEquals(5, list2.size());
+
+        List<Cocktail> list3 = api.getRandomCocktailsFromDB(3);
+        assertEquals(3, list3.size());
     }
 }

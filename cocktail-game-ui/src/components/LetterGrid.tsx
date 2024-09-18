@@ -4,7 +4,7 @@ import { useGameContext } from "../context/GameContext";
 import CustomButton from "./CustomButton";
 
 const LetterGrid: React.FC = () => {
-  const letters = "abcdefghijklmnopqrstvwxyz";
+  const letters = "abcdefghijklmnopqrstuvwxyz";
   const { game, handleGuessLetter, setGame } = useGameContext();
 
   const handleLetterClick = async (letter: string) => {

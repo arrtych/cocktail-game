@@ -20,10 +20,10 @@ const letterStyle = {};
 const GuessWord: React.FC<GuessWordProps> = (props: GuessWordProps) => {
   const { game } = useGameContext();
   return (
-    <Box sx={boxStyle} className="guess-Word">
+    <Box sx={boxStyle} className="guess-word">
       {game?.playerGuess?.map((letter: string, index: number) => (
         <Box key={index} sx={letterStyle}>
-          {letter}
+          {letter.toUpperCase()}
         </Box>
       ))}
 

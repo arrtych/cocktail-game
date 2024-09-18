@@ -28,18 +28,6 @@ export const startGame = async (player: PlayerProps) => {
   }
 };
 
-// http://localhost:8080/api/game/start // post
-
-// http://localhost:8080/api/game/{playerId}/guess?letter=m //put
-
-// http://localhost:8080/api/game/state // get
-
-// http://localhost:8080/api/game/skip // put
-
-// http://localhost:8080/api/game/end // post
-
-// @PutMapping("/{playerId}/guess")
-
 export const guessLetter = async (props: GuessLetterProps) => {
   try {
     const playerId = props.playerId;

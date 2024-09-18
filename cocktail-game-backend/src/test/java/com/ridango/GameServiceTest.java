@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,20 +28,26 @@ public class GameServiceTest {
     @BeforeEach
     public void init() {
         api = new RestClient();
-//        game = new Game();
         gameService = new GameService();
-//        player = new Player("Tom");
         player = "Tom";
 
     }
 
     @Test
     public void generateCocktailTest() {
-        Cocktail cocktail = gameService.generateCocktail();
+        this.gameService.startNewGame(player);
+        Game lastGame = gameService.getLastGame();
+
+        Cocktail cocktail = lastGame.getCocktail();
         Assertions.assertNotNull(cocktail);
         assertTrue(cocktail instanceof Cocktail);
         assertTrue(cocktail.getStrInstructions() instanceof String);
         assertTrue(cocktail.getIdDrink() instanceof String);
+
+        lastGame.nextRound();
+        Cocktail newCocktail = this.gameService.generateCocktail();
+
+        assertTrue(!lastGame.getCocktail().equals(newCocktail));
     }
 
     @Test
@@ -55,18 +62,61 @@ public class GameServiceTest {
     public void wordToArrayForGuessTest() {
         this.gameService.startNewGame(player);
         Game lastGame = gameService.getLastGame();
+
+        //Override gameCocktail to "margarita" instead of sets from api.
+        List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
+        this.gameService.getLastGame().setCocktailDB(Arrays.asList(cocktails.get(0)));
+        Cocktail cocktail = this.gameService.generateCocktail();
+        this.gameService.setGameCocktail(cocktail);
+
         assertEquals(lastGame.getWordToGuess().size(), lastGame.getPlayerGuess().size());
         String letter = lastGame.getPlayerGuess().get(1);
         assertEquals(letter, "_");
     }
 
     @Test
+    public void wordWithSpacesToArrayForGuessTest() {
+        this.gameService.startNewGame(player);
+        Game lastGame = gameService.getLastGame();
+
+        //Override gameCocktail to "Old Pal" instead of sets from api.
+        List<Cocktail> cocktails = api.getAllCocktailsByName("Old").getList();
+        this.gameService.getLastGame().setCocktailDB(Arrays.asList(cocktails.get(0)));
+        Cocktail cocktail = this.gameService.generateCocktail();
+        this.gameService.setGameCocktail(cocktail);
+
+        String letter = lastGame.getPlayerGuess().get(3);
+        assertEquals(letter, " "); //4th symbol is space
+
+    }
+
+    @Test
+    public void wordWithSymbolToArrayForGuessTest() {
+        this.gameService.startNewGame(player);
+        Game lastGame = gameService.getLastGame();
+
+        //Override gameCocktail to <"idDrink": "17222", "strDrink": "A1">, instead of sets from api.
+        List<Cocktail> cocktails = api.getAllCocktailsByName("&").getList();
+        this.gameService.getLastGame().setCocktailDB(Arrays.asList(cocktails.get(0)));
+        Cocktail cocktail = this.gameService.generateCocktail();
+        this.gameService.setGameCocktail(cocktail);
+
+        String letter = lastGame.getPlayerGuess().get(1);
+        assertEquals(letter, "1"); //2th symbol is space
+
+
+    }
+
+    @Test
     public void checkPlayerGuessTest() {
         this.gameService.startNewGame(player);
 
+        //Override gameCocktail to "margarita" instead of sets from api.
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
-        Cocktail cocktail = cocktails.get(0);
-        this.gameService.getLastGame().setCocktail(cocktail);
+        this.gameService.getLastGame().setCocktailDB(Arrays.asList(cocktails.get(0)));
+        Cocktail cocktail = this.gameService.generateCocktail();
+        this.gameService.setGameCocktail(cocktail);
+
 
         assertTrue(this.gameService.checkPlayerGuess("a", gameService.getLastGame().getPlayer().getId()));
 
@@ -93,9 +143,13 @@ public class GameServiceTest {
     public void checkPlayerGuessFullWordCorrectWithOneMistakeTest() {
         gameService.startNewGame(player);
 
+        //Override gameCocktail to "margarita" instead of sets from api.
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
-        Cocktail cocktail = cocktails.get(0);
-        gameService.getLastGame().setCocktail(cocktail);
+        this.gameService.getLastGame().setCocktailDB(Arrays.asList(cocktails.get(0)));
+        Cocktail cocktail = this.gameService.generateCocktail();
+        this.gameService.setGameCocktail(cocktail);
+
+
         int playerId = gameService.getLastGame().getPlayer().getId();
         assertTrue(gameService.checkPlayerGuess("a", playerId));
         assertFalse(gameService.checkPlayerGuess("h",playerId));
@@ -107,7 +161,6 @@ public class GameServiceTest {
 
         assertEquals(gameService.getLastGame().getScore(), 4);
         assertEquals(gameService.getLastGame().getPlayer().getScore(), 4);
-//        System.out.println(this.gameService.getLastGame());
     }
 
 
@@ -115,10 +168,13 @@ public class GameServiceTest {
     public void revealNextLetterTest() {
         gameService.startNewGame(player);
 
-        List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
-        Cocktail cocktail = cocktails.get(0);
-        gameService.getLastGame().setCocktail(cocktail);
         Game lastGame =  gameService.getLastGame();
+        //Override gameCocktail to "margarita" instead of sets from api.
+        List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
+        this.gameService.getLastGame().setCocktailDB(Arrays.asList(cocktails.get(0)));
+        Cocktail cocktail = this.gameService.generateCocktail();
+        this.gameService.setGameCocktail(cocktail);
+
         gameService.revealNextLetter();
 
         assertEquals("a",lastGame.getPlayerGuess().get(1));
@@ -130,7 +186,7 @@ public class GameServiceTest {
         assertEquals("r",lastGame.getPlayerGuess().get(2));
         assertEquals("r",lastGame.getPlayerGuess().get(5));
         assertEquals(3, lastGame.getAttemptsLeft());
-        System.out.println(gameService);
+//        System.out.println(gameService);
 
     }
 
@@ -139,9 +195,13 @@ public class GameServiceTest {
     public void showCocktailInfoWhenPlayerNeedHintsTest() {
         gameService.startNewGame(player);
 
+        //Override gameCocktail to "margarita" instead of sets from api.
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
-        Cocktail cocktail = cocktails.get(0);
-        gameService.getLastGame().setCocktail(cocktail);
+        this.gameService.getLastGame().setCocktailDB(Arrays.asList(cocktails.get(0)));
+        Cocktail cocktail = this.gameService.generateCocktail();
+        this.gameService.setGameCocktail(cocktail);
+
+
         assertTrue(gameService.showCocktailHintInfo(cocktail, ApiKeyStr.CATEGORY));
         assertEquals("Ordinary Drink", gameService.getLastGame().getCocktailOpenInfo().get("strCategory"));
 
@@ -159,7 +219,6 @@ public class GameServiceTest {
 
     }
 
-//    this.showCocktailInfo(currentGame.getCocktail(), INGREDIENT);
 
 
 

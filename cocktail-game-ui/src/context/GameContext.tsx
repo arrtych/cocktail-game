@@ -42,6 +42,7 @@ const handleStartGame = async (name: string) => {
 const handleSkipRound = async (setGame: (game: Game) => void) => {
   const updatedGame = await skipRound();
   setGame(updatedGame);
+  console.log("New cocktail: Guess:", updatedGame?.cocktail);
 };
 
 const handleFinishGame = async (setGame: (game: Game) => void) => {
@@ -58,8 +59,9 @@ const handleGuessLetter = async (
   props: GuessLetterProps,
   setGame: (game: Game) => void
 ) => {
-  const updatedGame = await guessLetter(props); // Make the guessLetter API call
+  const updatedGame = await guessLetter(props);
   setGame(updatedGame); // Update the game in the context after guessing a letter
+  console.log("Guess cocktail:", updatedGame?.cocktail);
 };
 
 const handleShowCocktailHintInfo = async (

@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import AddPlayer from "./AddPlayer";
 import GuessContainer from "./GuessContainer";
-import PlayerScore from "./PlayerScore";
+import GameData from "./GameData";
 import GameOver from "./GameOver";
 
 const Container: React.FC = () => {
@@ -27,7 +27,7 @@ const Container: React.FC = () => {
         {/* Show Add player if game not created yet or finished */}
         {(!game || !game?.active) && <AddPlayer />}
 
-        <PlayerScore />
+        <GameData />
 
         {game && !game?.active ? <GameOver /> : <GuessContainer />}
       </Grid>

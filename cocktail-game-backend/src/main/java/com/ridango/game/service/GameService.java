@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ridango.game.types.ApiKeyStr.*;
-//import static com.ridango.game.types.ApiKeyStr.CATEGORY;
+
 
 @Service
 public class GameService {
@@ -23,26 +22,33 @@ public class GameService {
 
     private static final int MAX_ATTEMPTS = 5;
 
+    /**
+     * Each round means new word for guess. Player cant skip if no available words.
+     */
+    private static final int MAX_ROUNDS = 3;
+
+
+    public GameService() {
+    }
+
     public Map<Integer, Game> getGames() {
         return games;
     }
 
-    public GameService() {
-        //setPlayer
-        //updatePlayerScore
-        //generate word,
-        // save correct word - guessed cocktail
-    }
-
+    /**
+     * Get new Cocktail from game db by game round number
+     * @return
+     */
     public Cocktail generateCocktail() {
-        //todo: change later logic for getting
-        // todo: get cocktail with name.length > 3
-        //todo: In one game same cocktail shouldn't appear twice
-        List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
-        Cocktail cocktail = cocktails.get(0);
-
-        return cocktail;
+        Game currentGame = this.getLastGame();
+        if(currentGame.getCocktailDB().size() == 1) {
+            return currentGame.getCocktailDB().get(0);
+        } else {
+            return currentGame.getCocktailDB().get(currentGame.getRound() - 1);
+        }
     }
+
+
 
     public  List<String> wordToList(String word) {
         return Arrays.stream(word.split(""))
@@ -53,59 +59,52 @@ public class GameService {
     public List<String> wordToArrayForGuess(List<String> originalList) {
         List<String> result = new ArrayList<>();
         for (String word : originalList) {
-            char[] underscores = new char[word.length()];
-            Arrays.fill(underscores, '_');
-            result.add(new String(underscores));
+            StringBuilder underscoredWord = new StringBuilder();
+            for (char c : word.toCharArray()) {
+                // If character is a space or symbol, add the character, otherwise add an underscore
+                if (Character.isLetter(c)) {
+                    underscoredWord.append('_');
+                } else {
+                    underscoredWord.append(c);
+                }
+            }
+            result.add(underscoredWord.toString());
         }
         return result;
     }
 
 
 
-    public Game  startGame() {
-        Game game = new Game();
-        Player player = new Player("Tim");
-        game.setPlayer(player);
-        games.put(game.getId(), game);
 
-        Cocktail cocktail = this.generateCocktail();
-        game.setWordToGuess(wordToList(cocktail.getStrDrink()));
-
-
-/**
- *
- *         setWordToGuess  // optimize api requests.(change api )
- *         printWord (with empty chars) +
- *         player start guess +
- *         check if chars exists, and for dublicates, //nb: cant select char twice +
- *                 calculates points
- *                 (use hints)
- *         check for win/lose
- *                 (if word guessed setWordToGuess: clear and set next)
- *         check for win/lose
- *
- */
-
-
-        return game;
-    }
 
     public Game startNewGame(String playerName) {
         Game game = new Game();
         Player player = new Player(playerName);
         game.setPlayer(player);
+        game.setCocktailDB(api.getRandomCocktailsFromDB(MAX_ROUNDS));
         games.put(game.getId(), game);
 
+
         Cocktail cocktail = this.generateCocktail();
-        game.setCocktail(cocktail);
         game.setAttemptsLeft(MAX_ATTEMPTS);
-        game.setWordToGuess(wordToList(cocktail.getStrDrink()));
-        game.setPlayerGuess(wordToArrayForGuess(game.getWordToGuess()));
+        this.setGameCocktail(cocktail);
+
+//        game.getGameCocktails().add(cocktail);
+//        game.setCocktail(cocktail);
+//        game.setWordToGuess(wordToList(cocktail.getStrDrink()));
+//        game.setPlayerGuess(wordToArrayForGuess(game.getWordToGuess()));
+
+
         return game;
     }
 
-
-
+    public void setGameCocktail(Cocktail cocktail) {
+        Game currentGame = this.getLastGame();
+        currentGame.getGameCocktails().add(cocktail);
+        currentGame.setCocktail(cocktail);
+        currentGame.setWordToGuess(wordToList(cocktail.getStrDrink()));
+        currentGame.setPlayerGuess(wordToArrayForGuess(currentGame.getWordToGuess()));
+    }
 
 
     public Game getLastGame() {
@@ -136,7 +135,7 @@ public class GameService {
                    if (!currentGame.getPlayerGuess().contains("_")) {
                        currentGame.setScore(currentGame.getScore() + currentGame.getAttemptsLeft()); // Increase score
                        currentGame.getPlayer().setScore(currentGame.getScore());
-                       System.out.println(getLastGame());
+
                        this.startNewRound(currentGame); // Start a new round with a new cocktail
                    }
                    result = true;
@@ -149,9 +148,8 @@ public class GameService {
                currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
                currentGame.getSelectedLetters().add(letter); //save player search letter
 
-               if (currentGame.getAttemptsLeft() == 0) {
+               if (currentGame.getAttemptsLeft() <= 0) {
                    this.endGame();
-//                   throw new GameOverException("Game over! You have no more attempts.");
                }
            }
         }
@@ -160,20 +158,28 @@ public class GameService {
 
     public void startNewRound(Game currentGame) {
         // Reset the game with a new cocktail
+        currentGame.nextRound();
+
         Cocktail newCocktail = this.generateCocktail();
-        currentGame.setCocktail(newCocktail);
-        currentGame.setWordToGuess(wordToList(newCocktail.getStrDrink()));
-        currentGame.setPlayerGuess(wordToArrayForGuess(currentGame.getWordToGuess()));
+
+        setGameCocktail(newCocktail);
         currentGame.setSelectedLetters(new ArrayList<>());
         currentGame.setCocktailOpenInfo(new HashMap<>());
         currentGame.setAttemptsLeft(MAX_ATTEMPTS); // Reset attempts for the new cocktail
 
+
     }
 
-    public void skipRound() {//todo: test
+    public void skipRound() {
         this.getLastGame().setAttemptsLeft(this.getLastGame().getAttemptsLeft() - 1);
-        this.startNewRound(this.getLastGame());
-        //show hint
+
+        if(this.getLastGame().getRound() == MAX_ROUNDS) {
+            this.endGame();
+        } else {
+            this.startNewRound(this.getLastGame());
+        }
+
+
     }
 
     public void endGame() {
@@ -197,10 +203,16 @@ public class GameService {
                     }
                 }
                 currentGame.getSelectedLetters().add(letter);
+
                 currentGame.setAttemptsLeft(currentGame.getAttemptsLeft() - 1);
+
                 // Break after revealing the first unselected letter
                 break;
             }
+        }
+
+        if (currentGame.getAttemptsLeft() <= 0) {
+            this.endGame();
         }
     }
 
@@ -230,40 +242,44 @@ public class GameService {
         String key = property.getValue();
         cocktailMap.put(key, obj);
         if(obj != null) {
-//                            && !mapContainsKeys(List.of(
-//                    CATEGORY.getValue(),
-//                    GLASS.getValue(),
-//                    INGREDIENT.getValue()))
+
             this.getLastGame().getCocktailOpenInfo().put(key, obj);
+            //decrease attempts amount
+            this.getLastGame().setAttemptsLeft(this.getLastGame().getAttemptsLeft() - 1);
+            if (this.getLastGame().getAttemptsLeft() <= 0) {
+                this.endGame();
+            }
             return true;
         }
+
+
         return false;
     }
 
 
 
 
-    /**
-     * Check if all cocktail hint info already shown or not
-     * @param keys
-     * @return
-     */
-    public boolean mapContainsKeys(List<String> keys) {
-        for (String key : keys) {
-            if (!this.getLastGame().getCocktailOpenInfo().containsKey(key)) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    /**
+//     * Check if all cocktail hint info already shown or not
+//     * @param keys
+//     * @return
+//     */
+//    public boolean mapContainsKeys(List<String> keys) {
+//        for (String key : keys) {
+//            if (!this.getLastGame().getCocktailOpenInfo().containsKey(key)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
-    public Game getGameById(int gameId) {
-        Game game = games.get(gameId);
-        if (game == null) {
-            throw new IllegalArgumentException("Game not found for ID: " + gameId);
-        }
-        return game;
-    }
+//    public Game getGameById(int gameId) {
+//        Game game = games.get(gameId);
+//        if (game == null) {
+//            throw new IllegalArgumentException("Game not found for ID: " + gameId);
+//        }
+//        return game;
+//    }
 
 
 }

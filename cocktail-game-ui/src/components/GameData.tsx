@@ -3,15 +3,8 @@ import React from "react";
 import Grid from "@mui/material/Grid2";
 import { useGameContext } from "../context/GameContext";
 
-// interface PlayerScoreProps {
-//   //remove
-//   name?: string;
-//   score?: number;
-//   attemptsLeft?: number;
-// }
-
-const PlayerScore: React.FC = () => {
-  const playerScoreStyle = {
+const GameData: React.FC = () => {
+  const gameDatastyle = {
     display: "flex",
     fontWeight: "bold",
     flexDirection: "row",
@@ -28,7 +21,7 @@ const PlayerScore: React.FC = () => {
   const { game, player } = useGameContext();
   return (
     player && (
-      <Grid size={12} className="name" sx={playerScoreStyle}>
+      <Grid size={12} className="name" sx={gameDatastyle}>
         <Box className="name" sx={boxStyle}>
           <p>Player:</p>
           <p>{player?.name}</p>
@@ -36,6 +29,10 @@ const PlayerScore: React.FC = () => {
         <Box className="score" sx={boxStyle}>
           <p>Score:</p>
           <p>{game?.score}</p>
+        </Box>
+        <Box className="score" sx={boxStyle}>
+          <p>Round:</p>
+          <p>{game?.round}</p>
         </Box>
         <Box className="score" sx={boxStyle}>
           <p>Attemps left:</p>
@@ -46,4 +43,4 @@ const PlayerScore: React.FC = () => {
   );
 };
 
-export default PlayerScore;
+export default GameData;

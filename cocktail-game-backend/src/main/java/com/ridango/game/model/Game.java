@@ -15,9 +15,22 @@ public class Game {
 
     private int attemptsLeft = 5; // Max attempts per game
 
-//    private int step = 0;
-
+    /**
+     * Current cocktail for guess
+     */
     private Cocktail cocktail;
+
+    /**
+     * Cocktails that were shown in the game, that player tried to guess
+     */
+    private List<Cocktail> gameCocktails = new ArrayList<>();
+
+    /**
+     * Cocktails that were generated for game
+     */
+    private List<Cocktail> cocktailDB = new ArrayList<>();
+
+    private int round;
 
 
     private List<String> wordToGuess;
@@ -40,6 +53,8 @@ public class Game {
 
     public Game() {
         this.id = GameIdGenerator.getInstance().generateId();
+        this.isActive = true;
+        this.round = 1;
     }
 
     public int getId() {
@@ -53,13 +68,6 @@ public class Game {
         this.score = score;
     }
 
-//    public int getStep() {
-//        return step;
-//    }
-
-//    public void nextStep() {
-//        this.step++;
-//    }
 
     public Player getPlayer() {
         return player;
@@ -70,7 +78,7 @@ public class Game {
         //todo: check if player already exists
         //add exception if no player
         this.player = player;
-        this.isActive = true;
+
     }
 
     public Cocktail getCocktail() {
@@ -127,5 +135,33 @@ public class Game {
 
     public void setCocktailOpenInfo(Map<String, Object> cocktailOpenInfo) {
         this.cocktailOpenInfo = cocktailOpenInfo;
+    }
+
+    public List<Cocktail> getGameCocktails() {
+        return gameCocktails;
+    }
+
+    public void setGameCocktails(List<Cocktail> gameCocktails) {
+        this.gameCocktails = gameCocktails;
+    }
+
+    public List<Cocktail> getCocktailDB() {
+        return cocktailDB;
+    }
+
+    public void setCocktailDB(List<Cocktail> cocktailDB) {
+        this.cocktailDB = cocktailDB;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public void nextRound() {
+        this.round++;
     }
 }

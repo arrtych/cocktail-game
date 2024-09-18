@@ -12,8 +12,6 @@ const GuessContainer: React.FC = () => {
 
   const wordDescriptionStyle = {
     fontSize: "1em",
-    marginLeft: "10px",
-    marginRight: "10px",
     textAlign: "center",
     marginTop: "2.5em",
   };

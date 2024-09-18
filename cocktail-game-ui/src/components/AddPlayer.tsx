@@ -16,6 +16,7 @@ const AddPlayer: React.FC = () => {
       const game = await startGame({ playerName: playerName }); //todo: fix and test
       setGame(game);
       setPlayer(game.player);
+      console.log("Game started: Guess:", game?.cocktail);
     } catch (error) {
       console.error("Failed to start the game:", error);
     }
