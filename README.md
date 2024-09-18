@@ -45,3 +45,46 @@
     * Your code has tests where necessary
     * You are ready to explain your game & code
     * You are aware of the possible bugs in your game & code
+
+
+
+--------------------------------------------
+
+# Cocktail Game
+
+This is a full-stack application consisting of a React frontend and a Spring Boot backend.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Before you dive into the fun, ensure you have the following installed:
+
+- [Docker](https://docs.docker.com/get-docker/) - The containerization platform that makes it easy to run applications in isolated environments.
+- [Docker Compose](https://docs.docker.com/compose/install/) - A tool for defining and running multi-container Docker applications.
+
+### Step-by-Step Instructions
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/cocktail-game.git
+   cd cocktail-game
+2. **Build and Start the Application**:
+   ```bash
+    docker-compose up --build
+3. **Access the Application**:
+- Frontend: Open your web browser and navigate to http://localhost:3000.
+- Backend: The backend API will be accessible at http://localhost:8080
+.
+
+**Additional Commands**
+- **Stopping the Application**:
+   ```bash
+    docker-compose down
+- **Rebuilding the Application**:
+   ```bash
+    docker-compose up --build
+    
+📚 Project Structure
+- *cocktail-game-backend*: The Spring Boot backend application.
+- *cocktail-game-ui*: The React frontend application.
