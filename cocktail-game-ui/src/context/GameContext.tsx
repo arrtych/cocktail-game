@@ -42,7 +42,7 @@ const handleStartGame = async (name: string) => {
 const handleSkipRound = async (setGame: (game: Game) => void) => {
   const updatedGame = await skipRound();
   setGame(updatedGame);
-  console.log("New cocktail: Guess:", updatedGame?.cocktail);
+  console.log("Guess cocktail:", updatedGame?.cocktail);
 };
 
 const handleFinishGame = async (setGame: (game: Game) => void) => {

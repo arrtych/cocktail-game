@@ -9,9 +9,6 @@ import GameOver from "./GameOver";
 
 const Container: React.FC = () => {
   const { game } = useGameContext();
-  // useEffect(() => {
-  //   // handleStartGame();
-  // }, []);
 
   const mainSectionStyles = { width: "900px", margin: "0 auto" };
 

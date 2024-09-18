@@ -1,10 +1,31 @@
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import { useGameContext } from "../context/GameContext";
 
 const GameData: React.FC = () => {
-  const gameDatastyle = {
+  const { game, player } = useGameContext();
+  const [highlightClass, setHighlightClass] = useState("");
+
+  const highlightParagraph = () => {
+    setHighlightClass("highlight");
+
+    setTimeout(() => {
+      setHighlightClass("");
+    }, 5000);
+  };
+
+  useEffect(() => {
+    if (
+      game?.attemptsLeft !== undefined &&
+      game?.attemptsLeft < 5 &&
+      game.active
+    ) {
+      highlightParagraph();
+    }
+  }, [game?.attemptsLeft]);
+
+  const gameDataStyle = {
     display: "flex",
     fontWeight: "bold",
     flexDirection: "row",
@@ -18,10 +39,9 @@ const GameData: React.FC = () => {
     gap: "10px",
   };
 
-  const { game, player } = useGameContext();
   return (
     player && (
-      <Grid size={12} className="name" sx={gameDatastyle}>
+      <Grid size={12} className="game-data" sx={gameDataStyle}>
         <Box className="name" sx={boxStyle}>
           <p>Player:</p>
           <p>{player?.name}</p>
@@ -30,11 +50,11 @@ const GameData: React.FC = () => {
           <p>Score:</p>
           <p>{game?.score}</p>
         </Box>
-        <Box className="score" sx={boxStyle}>
+        <Box className="round" sx={boxStyle}>
           <p>Round:</p>
           <p>{game?.round}</p>
         </Box>
-        <Box className="score" sx={boxStyle}>
+        <Box className={`attemps ${highlightClass}`} sx={boxStyle}>
           <p>Attemps left:</p>
           <p>{game?.attemptsLeft}</p>
         </Box>

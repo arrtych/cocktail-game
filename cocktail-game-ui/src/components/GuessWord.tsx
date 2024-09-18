@@ -26,14 +26,6 @@ const GuessWord: React.FC<GuessWordProps> = (props: GuessWordProps) => {
           {letter.toUpperCase()}
         </Box>
       ))}
-
-      {/* {Array(wordLength)
-        .fill(null)
-        .map((_, index) => (
-          <Box key={index} sx={letterStyle} className="boox">
-            _
-          </Box>
-        ))} */}
     </Box>
   );
 };
