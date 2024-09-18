@@ -68,7 +68,7 @@ Before you dive into the fun, ensure you have the following installed:
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/yourusername/cocktail-game.git
-   cd cocktail-game
+
 2. **Build and Start the Application**:
    ```bash
     docker-compose up --build
