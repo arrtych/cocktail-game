@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  cocktail-game-ui:
+    build:
+      context: ./cocktail-game-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"  # Map port 3000 on the host to port 80 in the container
+    depends_on:
+      - cocktail-game-backend
+    networks:
+      - cocktail-game-network
+
+  cocktail-game-backend:
+    build:
+      context: ./cocktail-game-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  # Map port 8080 on the host to port 8080 in the container
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - cocktail-game-network
+
+networks:
+  cocktail-game-network:
+    driver: bridge
