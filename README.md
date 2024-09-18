@@ -75,7 +75,8 @@ Before you dive into the fun, ensure you have the following installed:
 3. **Access the Application**:
 - Frontend: Open your web browser and navigate to http://localhost:3000.
 - Backend: The backend API will be accessible at http://localhost:8080
-.
+- Backend Swagger: http://localhost:8080/swagger-ui/index.html#/
+
 
 **Additional Commands**
 - **Stopping the Application**:
