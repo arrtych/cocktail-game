@@ -36,7 +36,9 @@ const AddPlayer: React.FC = () => {
         variant="standard"
         onChange={(e) => setPlayerName(e.target.value)}
       />
-      <CustomButton onClick={handleAddPlayer}>Add player</CustomButton>
+      <CustomButton size="medium" onClick={handleAddPlayer}>
+        Add player
+      </CustomButton>
     </Grid>
   );
 };

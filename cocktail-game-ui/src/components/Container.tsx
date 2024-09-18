@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useGameContext } from "../context/GameContext";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import AddPlayer from "./AddPlayer";
 import GuessContainer from "./GuessContainer";
-import GuessWord from "./GuessWord";
 import PlayerScore from "./PlayerScore";
 import GameOver from "./GameOver";
 

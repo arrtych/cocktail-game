@@ -84,3 +84,16 @@ export const revealLetter = async () => {
     throw error;
   }
 };
+
+export const showCocktailHintInfo = async (cocktailParam: string) => {
+  try {
+    // const cocktailParam = "";
+    const response = await axios.put(
+      `${API_BASE_URL}/show-cocktail-hints/${cocktailParam}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error revealLetter:", error);
+    throw error;
+  }
+};

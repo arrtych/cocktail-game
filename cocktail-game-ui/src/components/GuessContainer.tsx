@@ -5,6 +5,7 @@ import LetterGrid from "./LetterGrid";
 import GuessWord from "./GuessWord";
 import HelpButtons from "./HelpButtons";
 import { useGameContext } from "../context/GameContext";
+import CocktailHintInfo from "./CocktailHintInfo";
 
 const GuessContainer: React.FC = () => {
   const { game } = useGameContext();
@@ -29,16 +30,19 @@ const GuessContainer: React.FC = () => {
             <p>{game?.cocktail?.strInstructions}</p>
           </Grid>
 
-          <Grid size={12} className="help-buttons">
+          <Grid size={12}>
             <HelpButtons />
           </Grid>
-          <Grid size={12} className="guess-Word">
+          <Grid size={12}>
             <GuessWord />
+          </Grid>
+          <Grid>
+            <CocktailHintInfo />
           </Grid>
         </>
       )}
 
-      <Grid size={12} className="letter-grid">
+      <Grid size={12}>
         <LetterGrid />
       </Grid>
     </Box>

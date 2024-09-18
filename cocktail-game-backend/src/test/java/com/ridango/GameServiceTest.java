@@ -3,7 +3,6 @@ package com.ridango;
 import com.ridango.game.exceptions.LetterAlreadySelectedException;
 import com.ridango.game.model.Cocktail;
 import com.ridango.game.model.Game;
-import com.ridango.game.model.Player;
 import com.ridango.game.service.GameService;
 import com.ridango.game.service.RestClient;
 import com.ridango.game.types.ApiKeyStr;
@@ -143,17 +142,17 @@ public class GameServiceTest {
         List<Cocktail> cocktails = api.getAllCocktailsByName("margarita").getList();
         Cocktail cocktail = cocktails.get(0);
         gameService.getLastGame().setCocktail(cocktail);
-        assertTrue(gameService.showCocktailInfo(cocktail, ApiKeyStr.CATEGORY));
+        assertTrue(gameService.showCocktailHintInfo(cocktail, ApiKeyStr.CATEGORY));
         assertEquals("Ordinary Drink", gameService.getLastGame().getCocktailOpenInfo().get("strCategory"));
 
-        assertFalse(gameService.showCocktailInfo(cocktail, ApiKeyStr.ALCOHOLIC));
+        assertFalse(gameService.showCocktailHintInfo(cocktail, ApiKeyStr.ALCOHOLIC));
 
-        assertTrue(gameService.showCocktailInfo(cocktail, ApiKeyStr.INGREDIENT));
+        assertTrue(gameService.showCocktailHintInfo(cocktail, ApiKeyStr.INGREDIENT));
         List<String> ingredients = (List<String>) gameService.getLastGame().getCocktailOpenInfo().get("strIngredient");
         assertEquals(4, ingredients.size());
         assertEquals("Tequila", ingredients.get(0));
 
-        assertTrue(gameService.showCocktailInfo(cocktail, ApiKeyStr.GLASS));
+        assertTrue(gameService.showCocktailHintInfo(cocktail, ApiKeyStr.GLASS));
         assertEquals("Cocktail glass", gameService.getLastGame().getCocktailOpenInfo().get("strGlass"));
 
 

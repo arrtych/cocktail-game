@@ -42,7 +42,7 @@ const LetterGrid: React.FC = () => {
   };
 
   return (
-    <Box sx={letterGridStyle}>
+    <Box sx={letterGridStyle} className="letter-grid">
       {letters.split("").map((letter, index) => {
         const isLetterSelected = game?.selectedLetters.indexOf(letter) > -1;
         return (

@@ -9,14 +9,16 @@ interface ButtonProps {
   sx?: MuiButtonProps["sx"];
   variant?: MuiButtonProps["variant"];
   size?: MuiButtonProps["size"];
+  disabled?: MuiButtonProps["disabled"];
   children?: ReactNode;
   onClick?: () => void;
 }
 
 const CustomButton: React.FC<ButtonProps> = (props: ButtonProps) => {
-  const { children, color, variant, size, onClick, sx } = {
+  const { children, color, variant, size, disabled, onClick, sx } = {
     variant: "contained" as MuiButtonProps["variant"],
-    size: "contained" as MuiButtonProps["size"],
+    size: "small" as MuiButtonProps["size"],
+    disabled: false as MuiButtonProps["disabled"],
     ...props,
   };
 
@@ -27,6 +29,7 @@ const CustomButton: React.FC<ButtonProps> = (props: ButtonProps) => {
         sx={sx}
         color={color}
         size={size}
+        disabled={disabled}
         onClick={onClick}
       >
         {children}

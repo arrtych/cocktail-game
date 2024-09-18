@@ -2,9 +2,11 @@ package com.ridango.game.controller;
 
 import com.ridango.game.dto.PlayerNameRequest;
 import com.ridango.game.exceptions.GameOverException;
+import com.ridango.game.model.Cocktail;
 import com.ridango.game.model.Game;
 import com.ridango.game.model.Player;
 import com.ridango.game.service.GameService;
+import com.ridango.game.types.ApiKeyStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +66,32 @@ public class GameController {
         return ResponseEntity.ok(gameService.getLastGame());
     }
 
+    @PutMapping("show-cocktail-hints/{cocktailParam}")
+    public ResponseEntity<Game> showCocktailHintInfo(@PathVariable String cocktailParam) {
+        Cocktail cocktail = this.gameService.getLastGame().getCocktail();
+        ApiKeyStr param = getCocktailParam(cocktail,cocktailParam);
+        this.gameService.showCocktailHintInfo(cocktail, param);
+        return ResponseEntity.ok(gameService.getLastGame());
+    }
+
+
+
+    private ApiKeyStr getCocktailParam(Cocktail cocktail, String param) {
+        ApiKeyStr value = null;
+        switch (param) {
+            case "category":
+                value = ApiKeyStr.CATEGORY;
+
+                break;
+            case "ingredients":
+                value = ApiKeyStr.INGREDIENT;
+                break;
+            case "glass":
+                value = ApiKeyStr.GLASS;
+            default:
+        }
+        return value;
+    }
 
     @GetMapping("/all-games")
     public ResponseEntity<Map<Integer, Game>> getAllGames() {

@@ -6,6 +6,7 @@ import {
   skipRound,
   finishGame,
   revealLetter,
+  showCocktailHintInfo,
 } from "../service/ApiService";
 
 interface Player {
@@ -26,6 +27,7 @@ type GameContext = {
   handleSkipRound: () => void;
   handleFinishGame: () => void;
   handleRevealLetter: () => void;
+  handleShowCocktailHintInfo: (param: string) => void;
 };
 
 export const GameContext = createContext({} as GameContext);
@@ -60,6 +62,14 @@ const handleGuessLetter = async (
   setGame(updatedGame); // Update the game in the context after guessing a letter
 };
 
+const handleShowCocktailHintInfo = async (
+  param: string,
+  setGame: (game: Game) => void
+) => {
+  const game = await showCocktailHintInfo(param);
+  setGame(game);
+};
+
 export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -79,6 +89,8 @@ export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
         handleSkipRound: () => handleSkipRound(setGame),
         handleFinishGame: () => handleFinishGame(setGame),
         handleRevealLetter: () => handleRevealLetter(setGame),
+        handleShowCocktailHintInfo: (param: string) =>
+          handleShowCocktailHintInfo(param, setGame),
       }}
     >
       {children}

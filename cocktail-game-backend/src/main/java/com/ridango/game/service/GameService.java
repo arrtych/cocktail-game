@@ -1,6 +1,5 @@
 package com.ridango.game.service;
 
-import com.ridango.game.exceptions.GameOverException;
 import com.ridango.game.exceptions.LetterAlreadySelectedException;
 import com.ridango.game.model.Cocktail;
 import com.ridango.game.model.Game;
@@ -166,7 +165,7 @@ public class GameService {
         currentGame.setWordToGuess(wordToList(newCocktail.getStrDrink()));
         currentGame.setPlayerGuess(wordToArrayForGuess(currentGame.getWordToGuess()));
         currentGame.setSelectedLetters(new ArrayList<>());
-        currentGame.setCocktailOpenInfo(null);
+        currentGame.setCocktailOpenInfo(new HashMap<>());
         currentGame.setAttemptsLeft(MAX_ATTEMPTS); // Reset attempts for the new cocktail
 
     }
@@ -207,12 +206,12 @@ public class GameService {
 
 
     /**
-     * Method to shot hint as Cocktail data
+     * Method to show Cocktail data as hints
      * @param cocktail
      * @param property - Cocktail object property for showing as hint
      * @return
      */
-    public boolean showCocktailInfo(Cocktail cocktail, ApiKeyStr property) {
+    public boolean showCocktailHintInfo(Cocktail cocktail, ApiKeyStr property) {
 
         Map<String, Object> cocktailMap = new HashMap<>();
         Object obj = null;
@@ -231,10 +230,31 @@ public class GameService {
         String key = property.getValue();
         cocktailMap.put(key, obj);
         if(obj != null) {
-            this.getLastGame().setCocktailOpenInfo(cocktailMap);
+//                            && !mapContainsKeys(List.of(
+//                    CATEGORY.getValue(),
+//                    GLASS.getValue(),
+//                    INGREDIENT.getValue()))
+            this.getLastGame().getCocktailOpenInfo().put(key, obj);
             return true;
         }
         return false;
+    }
+
+
+
+
+    /**
+     * Check if all cocktail hint info already shown or not
+     * @param keys
+     * @return
+     */
+    public boolean mapContainsKeys(List<String> keys) {
+        for (String key : keys) {
+            if (!this.getLastGame().getCocktailOpenInfo().containsKey(key)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Game getGameById(int gameId) {
