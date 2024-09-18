@@ -177,7 +177,7 @@ public class RestClient {
      * @return
      */
     public List<Cocktail> getAllCocktailsFromDB() {
-        String possibleChars = "12345679abcdefghijklmnopqrstvwxyz";
+        String possibleChars = "12345679abcdefghijklmnopqrstuvwxyz";
         List<Cocktail> cocktailList = new ArrayList<>();
         try {
             for (int i = 0; i < possibleChars.length(); i++) {
@@ -196,12 +196,12 @@ public class RestClient {
     }
 
     /**
-     * Get random cocktails from api where length of coktail name >= 3 and <= 15
+     * Get random cocktails from api where length of cocktail name >= 3 and <= 15
      * @param amount of random cocktails
      * @return
      */
     public List<Cocktail> getRandomCocktailsFromDB(int amount) {
-        String possibleChars = "12345679abcdefghijklmnopqrstvwxyz";
+        String possibleChars = "12345679abcdefghijklmnopqrstuvwxyz";
         List<Cocktail> cocktailList = new ArrayList<>();
         Random random = new Random();
         try {
@@ -209,6 +209,10 @@ public class RestClient {
                 int randomIndex = random.nextInt(possibleChars.length());
                 String randomLetter = String.valueOf(possibleChars.charAt(randomIndex));
                 List<Cocktail> cocktails = getAllCocktailsByFirstLetter(randomLetter).getList();
+                //check if result from api is empty list (in case request:/search.php?f=x or /search.php?f=u)
+                if(cocktails == null) {
+                    continue;
+                }
                 int randomIdx = random.nextInt(cocktails.size());
                 Cocktail cocktail = cocktails.get(randomIdx);
                 if (!cocktailList.contains(cocktail) &&

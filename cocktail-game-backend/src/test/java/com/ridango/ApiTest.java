@@ -103,5 +103,8 @@ public class ApiTest {
 
         List<Cocktail> list3 = api.getRandomCocktailsFromDB(3);
         assertEquals(3, list3.size());
+
+        List<Cocktail> list4 = api.getRandomCocktailsFromDB(30);
+        assertEquals(30, list4.size());
     }
 }

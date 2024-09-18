@@ -25,7 +25,7 @@ public class GameService {
     /**
      * Each round means new word for guess. Player cant skip if no available words.
      */
-    private static final int MAX_ROUNDS = 3;
+    private static final int MAX_ROUNDS = 7;
 
 
     public GameService() {
@@ -84,15 +84,10 @@ public class GameService {
         game.setCocktailDB(api.getRandomCocktailsFromDB(MAX_ROUNDS));
         games.put(game.getId(), game);
 
-
         Cocktail cocktail = this.generateCocktail();
         game.setAttemptsLeft(MAX_ATTEMPTS);
         this.setGameCocktail(cocktail);
 
-//        game.getGameCocktails().add(cocktail);
-//        game.setCocktail(cocktail);
-//        game.setWordToGuess(wordToList(cocktail.getStrDrink()));
-//        game.setPlayerGuess(wordToArrayForGuess(game.getWordToGuess()));
 
 
         return game;
